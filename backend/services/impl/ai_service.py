@@ -54,12 +54,29 @@ class GeminiAIService(IAIService):
             response = None
             last_err = None
             
-            prompt = "Hãy nghe thật kỹ và tạo transcript tiếng Việt chi tiết, chính xác từng từ cho file âm thanh này. Tuyệt đối không tóm tắt, không thêm lời dẫn, chỉ ghi lại lời thoại."
+            prompt = """
+Hãy tạo transcript tiếng Việt cho file audio này dưới định dạng WebVTT chuẩn.
+Yêu cầu bắt buộc:
+1. Bắt đầu bằng dòng WEBVTT
+2. Có timestamp chính xác cho từng câu nói (dạng MM:SS.mmm hoặc HH:MM:SS.mmm).
+3. Chia nhỏ các câu để dễ theo dõi.
+4. Chỉ output nội dung VTT, không thêm bất kỳ lời dẫn nào khác.
+
+Ví dụ format:
+WEBVTT
+
+00:00:01.000 --> 00:00:05.000
+Xin chào tất cả mọi người.
+
+00:00:05.500 --> 00:00:10.000
+Hôm nay chúng ta sẽ nói về...
+"""
 
             for m_name in model_names:
                 try:
                     model = genai.GenerativeModel(m_name)
                     response = model.generate_content([prompt, audio_file])
+
                     break
                 except Exception as e:
                     last_err = e

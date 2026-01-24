@@ -48,49 +48,43 @@ class VTTSubtitleParser(ISubtitleParser):
         text = re.sub(r'^[>\-\s]+', '', text)
         return text.strip()
 
-    def parse_with_timestamps(self, file_path: str) -> Tuple[str, List[TranscriptSegment]]:
-        """Parse VTT file and return (full text, list of timed segments)"""
-        if not os.path.exists(file_path):
-            return "", []
+    def parse_content(self, content: str) -> Tuple[str, List[TranscriptSegment]]:
+        """Parse VTT content string and return (full text, list of timed segments)"""
+        segments: List[TranscriptSegment] = []
+        seen_texts = set()
+        
+        # Split into blocks (cues)
+        blocks = re.split(r'\n\s*\n', content)
+        
+        for block in blocks:
+            lines = block.strip().split('\n')
+            if not lines:
+                continue
             
-        try:
-            with open(file_path, 'r', encoding='utf-8') as f:
-                content = f.read()
+            # Skip header and metadata
+            if lines[0].startswith('WEBVTT'):
+                continue
+            if lines[0].startswith('NOTE'):
+                continue
+            if lines[0].startswith('Kind:') or lines[0].startswith('Language:'):
+                continue
             
-            segments: List[TranscriptSegment] = []
-            seen_texts = set()
+            # Look for timestamp line
+            timestamp_line = None
+            text_lines = []
             
-            # Split into blocks (cues)
-            # VTT format: timestamp line followed by text lines, separated by blank lines
-            blocks = re.split(r'\n\s*\n', content)
+            for line in lines:
+                if '-->' in line:
+                    timestamp_line = line
+                elif timestamp_line and line.strip():
+                    # Skip cue identifiers (numeric lines before timestamp)
+                    if not line.strip().isdigit():
+                        text_lines.append(line)
             
-            for block in blocks:
-                lines = block.strip().split('\n')
-                if not lines:
-                    continue
-                
-                # Skip header and metadata
-                if lines[0].startswith('WEBVTT'):
-                    continue
-                if lines[0].startswith('NOTE'):
-                    continue
-                if lines[0].startswith('Kind:') or lines[0].startswith('Language:'):
-                    continue
-                
-                # Look for timestamp line
-                timestamp_line = None
-                text_lines = []
-                
-                for line in lines:
-                    if '-->' in line:
-                        timestamp_line = line
-                    elif timestamp_line and line.strip():
-                        # Skip cue identifiers (numeric lines before timestamp)
-                        if not line.strip().isdigit():
-                            text_lines.append(line)
-                
-                if timestamp_line and text_lines:
+            if timestamp_line and text_lines:
+                try:
                     # Parse timestamps
+                    # Improved regex to handle cues with extra flags
                     match = re.match(r'([\d:.]+)\s*-->\s*([\d:.]+)', timestamp_line)
                     if match:
                         start_time = self._parse_timestamp(match.group(1))
@@ -108,12 +102,23 @@ class VTTSubtitleParser(ISubtitleParser):
                                 end=end_time,
                                 text=clean_text
                             ))
+                except Exception:
+                    continue
+        
+        # Build full transcript text
+        full_text = '\n'.join(seg.text for seg in segments)
+        
+        return full_text, segments
+
+    def parse_with_timestamps(self, file_path: str) -> Tuple[str, List[TranscriptSegment]]:
+        """Parse VTT file and return (full text, list of timed segments)"""
+        if not os.path.exists(file_path):
+            return "", []
             
-            # Build full transcript text
-            full_text = '\n'.join(seg.text for seg in segments)
-            
-            return full_text, segments
-            
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+            return self.parse_content(content)
         except Exception as e:
             print(f"VTT Parse Error: {e}")
             return "", []

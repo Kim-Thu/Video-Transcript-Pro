@@ -45,12 +45,22 @@ def get_transcript():
 
     except Exception as e:
         print(f"Workflow Error: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        
         error_msg = str(e)
         status_code = 500
         
-        # Map common errors to 400 Bad Request
-        if "Download failed" in error_msg or "unsupported" in error_msg.lower() or "not valid" in error_msg.lower():
+        # User-friendly error mapping
+        if "Download failed" in error_msg:
+            error_msg = "Không thể tải nội dung từ đường dẫn này (Có thể là link ảnh hoặc private). Vui lòng thử video khác."
             status_code = 400
+        elif "URL is required" in error_msg:
+             error_msg = "Vui lòng nhập đường dẫn video."
+             status_code = 400
+        elif "unsupported" in error_msg.lower() or "not valid" in error_msg.lower():
+             error_msg = "Đường dẫn không hợp lệ hoặc không được hỗ trợ."
+             status_code = 400
             
         return jsonify({'success': False, 'error': error_msg}), status_code
 
