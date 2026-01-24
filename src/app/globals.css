@@ -175,17 +175,17 @@ input:disabled,
 
 /* Button styles */
 .btn-primary {
-  @apply inline-flex items-center justify-center;
+  @apply inline-flex items-center justify-center h-[52px];
   background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
   color: white;
   font-weight: 600;
-  padding: 12px 24px;
+  padding: 0 24px;
   border-radius: 12px;
   border: none;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 4px 15px var(--shadow-color);
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .btn-primary:hover:not(:disabled) {
@@ -203,16 +203,16 @@ input:disabled,
 }
 
 .btn-secondary {
-  @apply inline-flex items-center justify-center;
+  @apply inline-flex items-center justify-center h-[52px];
   background: var(--color-card-bg);
   color: var(--color-primary);
   font-weight: 600;
-  padding: 12px 24px;
+  padding: 0 24px;
   border-radius: 12px;
   border: 2px solid var(--color-primary);
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .btn-secondary:hover:not(:disabled) {
@@ -222,11 +222,11 @@ input:disabled,
 
 /* Input styles - theme-aware */
 .input-field {
-  @apply w-full;
+  @apply w-full h-[52px];
   background: var(--color-input-bg);
   border: 2px solid var(--color-border);
   border-radius: 12px;
-  padding: 14px 18px;
+  padding: 0 18px;
   color: var(--color-foreground);
   font-size: 15px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
