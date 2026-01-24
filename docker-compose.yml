@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # Frontend - Next.js Application
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: transcript-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:5000
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - transcript-network
+
+  # Backend - Flask API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: transcript-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - DEBUG=false
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+    volumes:
+      # Mount downloads folder for persistent storage (optional)
+      - ./backend/downloads:/app/downloads
+    restart: unless-stopped
+    networks:
+      - transcript-network
+
+networks:
+  transcript-network:
+    driver: bridge

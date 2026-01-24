@@ -31,9 +31,14 @@ A powerful web application to extract transcripts (subtitles) from **TikTok**, *
 
 ## 📋 System Requirements
 
+### Option A: Traditional Setup
 - **Node.js** >= 18
 - **Python** >= 3.9
 - **FFmpeg** (installed and added to PATH)
+
+### Option B: Docker Setup
+- **Docker** >= 20.0
+- **Docker Compose** >= 2.0
 
 ## 🚀 Installation Guide
 
@@ -87,6 +92,38 @@ python app.py
 ```
 
 Backend will run at: `http://localhost:5000`
+
+### 4. 🐳 Docker Deployment (Alternative)
+
+Run both frontend and backend with a single command using Docker:
+
+```bash
+# Build and start all services
+docker-compose up -d
+
+# Or build with fresh images
+docker-compose up -d --build
+
+# View logs
+docker-compose logs -f
+
+# Stop all services
+docker-compose down
+```
+
+**Services will be available at:**
+- Frontend: `http://localhost:3000`
+- Backend: `http://localhost:5000`
+
+**Configure Gemini API Key for Docker:**
+```bash
+# Option 1: Set environment variable before running
+GEMINI_API_KEY=your_key_here docker-compose up -d
+
+# Option 2: Create a .env file in root directory
+echo "GEMINI_API_KEY=your_key_here" > .env
+docker-compose up -d
+```
 
 ## ⚙️ Configuration
 
@@ -144,8 +181,11 @@ Video-Transcript-Pro/
 │   ├── models/            # Data models
 │   ├── routes/            # API routes
 │   ├── services/          # Business logic services
-│   └── utils/             # Utility functions
+│   ├── utils/             # Utility functions
+│   └── Dockerfile         # Backend Docker image
 ├── public/                # Static assets
+├── Dockerfile             # Frontend Docker image
+├── docker-compose.yml     # Docker orchestration
 └── README.md              # This file
 ```
 
