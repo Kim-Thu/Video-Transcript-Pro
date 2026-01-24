@@ -175,17 +175,17 @@ input:disabled,
 
 /* Button styles */
 .btn-primary {
-  @apply inline-flex items-center justify-center h-[52px];
+  @apply inline-flex items-center justify-center h-10;
   background: linear-gradient(135deg, #6366f1 0%, #818cf8 100%);
   color: white;
   font-weight: 600;
-  padding: 0 24px;
-  border-radius: 12px;
+  padding: 0 16px;
+  border-radius: 8px;
   border: none;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 4px 15px var(--shadow-color);
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .btn-primary:hover:not(:disabled) {
@@ -203,16 +203,16 @@ input:disabled,
 }
 
 .btn-secondary {
-  @apply inline-flex items-center justify-center h-[52px];
+  @apply inline-flex items-center justify-center h-10;
   background: var(--color-card-bg);
   color: var(--color-primary);
   font-weight: 600;
-  padding: 0 24px;
-  border-radius: 12px;
+  padding: 0 16px;
+  border-radius: 8px;
   border: 2px solid var(--color-primary);
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .btn-secondary:hover:not(:disabled) {
@@ -222,14 +222,25 @@ input:disabled,
 
 /* Input styles - theme-aware */
 .input-field {
-  @apply w-full h-[52px];
+  @apply w-full;
   background: var(--color-input-bg);
   border: 2px solid var(--color-border);
-  border-radius: 12px;
-  padding: 0 18px;
+  border-radius: 8px;
+  padding: 0 14px;
   color: var(--color-foreground);
-  font-size: 15px;
+  font-size: 14px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Specific height for input elements */
+input.input-field {
+  @apply h-10;
+}
+
+/* Specific style for textareas using input-field */
+textarea.input-field {
+  @apply h-auto min-h-[200px] py-3;
+  line-height: 1.6;
 }
 
 .input-field:focus {
