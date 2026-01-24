@@ -6,6 +6,7 @@ import type { TranscriptViewerProps } from '@/types';
 import { useCallback, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { Badge, Button, Card } from './ui';
+import { CheckIcon, ClockIcon, CopyIcon, DocumentIcon, DownloadIcon, WarningIcon } from './ui/Icons';
 
 /**
  * Format seconds to MM:SS or HH:MM:SS format
@@ -95,13 +96,11 @@ export const TranscriptViewer = ({
         <div className="mb-4 p-4 rounded-xl bg-warning/10 border border-warning/30">
           <div className="flex items-start gap-3">
             <div className="w-8 h-8 rounded-full bg-warning/20 flex items-center justify-center shrink-0">
-              <svg className="w-4 h-4 text-warning" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
+              <WarningIcon className="w-4 h-4 text-warning" />
             </div>
             <div>
               <h4 className="font-semibold text-warning mb-1">{t('transcript.demo_mode')}</h4>
-              <p className="text-sm text-gray-400 leading-relaxed">
+              <p className="text-sm text-secondary-text leading-relaxed">
                 {t('transcript.demo_message')}
               </p>
             </div>
@@ -113,9 +112,7 @@ export const TranscriptViewer = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
         <div className="flex items-center gap-3">
           <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isDemo ? 'bg-warning/10 text-warning' : 'bg-primary/10 text-primary'}`}>
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
+            <DocumentIcon className="w-5 h-5" />
           </div>
           <div className="flex flex-col gap-1">
             <h3 className="font-semibold text-foreground">Transcript</h3>
@@ -129,9 +126,7 @@ export const TranscriptViewer = ({
               )}
               {hasTimestamps && (
                 <Badge variant="info" size="sm">
-                  <svg className="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
+                  <ClockIcon className="w-3 h-3 mr-1" />
                   {t('transcript.timed')}
                 </Badge>
               )}
@@ -147,11 +142,7 @@ export const TranscriptViewer = ({
               variant={showTimestamps ? "primary" : "secondary"}
               size="sm"
               onClick={() => setShowTimestamps(!showTimestamps)}
-              leftIcon={
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              }
+              leftIcon={<ClockIcon className="w-4 h-4" />}
             >
               {showTimestamps ? t('transcript.hide_time') : t('transcript.show_time')}
             </Button>
@@ -163,13 +154,9 @@ export const TranscriptViewer = ({
             onClick={handleCopy}
             leftIcon={
               copied ? (
-                <svg className="w-4 h-4 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
+                <CheckIcon className="w-4 h-4 text-success" />
               ) : (
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                </svg>
+                <CopyIcon className="w-4 h-4" />
               )
             }
           >
@@ -180,11 +167,7 @@ export const TranscriptViewer = ({
             variant="primary"
             size="sm"
             onClick={handleDownload}
-            leftIcon={
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-              </svg>
-            }
+            leftIcon={<DownloadIcon className="w-4 h-4" />}
           >
             {t('transcript.download')}
           </Button>
