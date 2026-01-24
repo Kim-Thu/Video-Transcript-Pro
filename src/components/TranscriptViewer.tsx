@@ -143,11 +143,8 @@ export const TranscriptViewer = ({
               size="sm"
               onClick={() => setShowTimestamps(!showTimestamps)}
               leftIcon={<ClockIcon className="w-4 h-4" />}
-            >
-              <span className="hidden sm:inline">
-                {showTimestamps ? t('transcript.hide_time') : t('transcript.show_time')}
-              </span>
-            </Button>
+              title={showTimestamps ? t('transcript.hide_time') : t('transcript.show_time')}
+            />
           )}
 
           <Button
@@ -161,22 +158,16 @@ export const TranscriptViewer = ({
                 <CopyIcon className="w-4 h-4" />
               )
             }
-          >
-            <span className="hidden sm:inline">
-              {copied ? t('transcript.copied_btn') : 'Copy'}
-            </span>
-          </Button>
+            title={copied ? t('transcript.copied_btn') : 'Copy'}
+          />
 
           <Button
             variant="primary"
             size="sm"
             onClick={handleDownload}
             leftIcon={<DownloadIcon className="w-4 h-4" />}
-          >
-            <span className="hidden sm:inline">
-              {t('transcript.download')}
-            </span>
-          </Button>
+            title={t('transcript.download')}
+          />
         </div>
       </div>
 

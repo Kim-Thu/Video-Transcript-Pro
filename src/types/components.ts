@@ -29,6 +29,7 @@ export interface ButtonProps extends BaseComponentProps {
   rightIcon?: ReactNode;
   onClick?: () => void;
   type?: 'button' | 'submit' | 'reset';
+  title?: string;
 }
 
 /**
