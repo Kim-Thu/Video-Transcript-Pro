@@ -42,10 +42,10 @@ class TranscriptWorkflow:
             print(f"[{video_id}] Found subtitles: {subs}")
             
             vietnamese_sub_path = next((s for s in subs if any(c in s.lower() for c in [
-                '.vi.', '.vie.', '.vi-', '.vie-',  # Standard patterns
-                '_vi_', '_vie_', '_vi-', '_vie-',  # Underscore patterns
-                'vi_vn', 'vie_vn', 'vi-vn',        # Locale patterns (e.g., vi_VN.vtt)
-                '.vietnamese.',                     # Full name pattern
+                '.vi.', '.vie.', '.vi-', '.vie-', '.vn.', '.vn-',  # Standard patterns
+                '_vi_', '_vie_', '_vi-', '_vie_', '_vn_', '_vn-',  # Underscore patterns
+                'vi_vn', 'vie_vn', 'vi-vn', 'vn_vn', 'vn-vn',      # Locale patterns
+                '.vietnamese.', '.tiengviet.',                     # Full name patterns
             ])), None)
             foreign_sub_path = next((s for s in subs if s != vietnamese_sub_path), None) if subs else None
             
@@ -83,7 +83,7 @@ class TranscriptWorkflow:
                      
                      source_type = TranscriptSource.AI_TRANSCRIPTION
                      
-                     # Try to parse VTT from AI response (Since we updated prompt to request VTT)
+                     # Try to parse VTT from AI response
                      try:
                         parsed_text, parsed_segments = self.parser.parse_content(ai_response)
                         if parsed_segments:
@@ -91,7 +91,6 @@ class TranscriptWorkflow:
                             final_segments = parsed_segments
                             print(f"[{video_id}] AI returned VTT with {len(parsed_segments)} segments.")
                         else:
-                            # Fallback: AI might have returned plain text
                             final_transcript = ai_response
                             final_segments = []
                             print(f"[{video_id}] AI returned text without valid VTT segments.")
