@@ -29,19 +29,17 @@ class TranscriptWorkflow:
         
         try:
             # 1. Download
+            print(f"[{video_id}] Downloading video...")
             downloaded_path = self.downloader.download_video(request.url, video_path)
             if not downloaded_path:
+                 print(f"[{video_id}] Download failed (downloader returned None)")
                  raise Exception(f"Download failed for {request.url}")
+            print(f"[{video_id}] Download successful: {downloaded_path}")
 
             # 2. Check for Subtitles
-            # Logic: 
-            # - IF YouTube AND has Vietnamese Sub -> Use it directly (Efficiency)
-            # - IF Foreign Sub -> Translate
-            # - ELSE (No sub or unreliable sub) -> Transcribe Audio
-            
-            # Find candidate subtitles
             base_name = os.path.splitext(downloaded_path)[0]
             subs = self.downloader.get_subtitles(base_name)
+            print(f"[{video_id}] Found subtitles: {subs}")
             
             vietnamese_sub_path = next((s for s in subs if any(c in s.lower() for c in [
                 '.vi.', '.vie.', '.vi-', '.vie-',  # Standard patterns
@@ -57,8 +55,6 @@ class TranscriptWorkflow:
             
             # Strategy Decision
             if vietnamese_sub_path:
-                # TRUST Vietnamese Subtitles from ALL platforms (TikTok, Facebook, YouTube)
-                # This saves Gemini tokens and is faster
                 print(f"[{video_id}] Found Vietnamese Subtitle on {platform}. Using it directly.")
                 final_transcript, final_segments = self.parser.parse_with_timestamps(vietnamese_sub_path)
                 source_type = TranscriptSource.OFFICIAL_SUBTITLE
@@ -70,20 +66,27 @@ class TranscriptWorkflow:
                 if raw_text:
                     print(f"[{video_id}] Translating foreign subtitle...")
                     final_transcript = self.ai_service.translate_text(raw_text, 'Vietnamese', request.api_key)
-                    # Note: Translated segments lose individual timing, but we preserve structure
-                    # For translated content, we keep the original segments' timing
-                    final_segments = foreign_segments
+                    # Note: Translated segments lose individual timing if we don't translate segment by segment
+                    # For now, we reuse original timings with translated text if possible, but translate_text does bulk translation
+                    # So we might lose segment alignment. Strategy: Keep foreign segments timing, but text is difficult.
+                    # Currently GeminiAIService.translate_text returns full text.
+                    # If we want segments, we should translate segments individually or use a smart mapping.
+                    # For MVP: Keep foreign segments logic separate or just return full text.
+                    # Let's just return full translated text and valid segments if we can map them, otherwise empty segments.
+                    # To keep it simple: if translated, we don't support segments yet unless we rewrite translate logic.
+                    final_segments = [] 
                     source_type = TranscriptSource.TRANSLATED_SUBTITLE
             
             # 3. Fallback to Audio Transcription
             if not final_transcript:
                 print(f"[{video_id}] No usable subtitle. Extracting and Transcribing Audio...")
                 if self.downloader.extract_audio(downloaded_path, audio_path):
+                     print(f"[{video_id}] Audio extracted. Calling AI Service...")
                      final_transcript = self.ai_service.transcribe_audio(audio_path, request.api_key)
                      source_type = TranscriptSource.AI_TRANSCRIPTION
-                     # AI transcription doesn't have timestamps, so segments remain empty
                      final_segments = []
                 else:
+                     print(f"[{video_id}] Audio extraction failed")
                      raise Exception("Audio extraction failed")
 
             return ProcessingResult(
@@ -93,8 +96,12 @@ class TranscriptWorkflow:
                 is_demo=False
             )
 
+        except Exception as e:
+            print(f"❌ [{video_id}] Workflow Failed: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            raise e
         finally:
-            # Cleanup
             self._cleanup(downloaded_path, audio_path, subs if 'subs' in locals() else [])
 
     def _cleanup(self, video_path, audio_path, subs):

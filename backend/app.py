@@ -4,6 +4,12 @@ from config import PORT, DEBUG
 from routes.video import video_bp
 from routes.transcript import transcript_bp
 from routes.health import health_bp
+from routes.health import health_bp
+import warnings
+
+# Suppress deprecation warnings
+warnings.filterwarnings("ignore", category=FutureWarning)
+warnings.filterwarnings("ignore", category=UserWarning)
 
 app = Flask(__name__)
 CORS(app) # Enable CORS for all routes

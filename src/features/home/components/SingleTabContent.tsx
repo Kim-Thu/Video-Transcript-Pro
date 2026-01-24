@@ -51,8 +51,8 @@ export const SingleTabContent: FC<SingleTabContentProps> = ({
         <div className="animate-fade-in">
             <Card className="mb-6">
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                    <div className="flex flex-col md:flex-row gap-4">
-                        <div className="flex-1">
+                    <div className="flex flex-col md:flex-row gap-4 items-start">
+                        <div className="flex-1 w-full">
                             <Input
                                 value={transcript.url}
                                 onChange={transcript.setUrl}
