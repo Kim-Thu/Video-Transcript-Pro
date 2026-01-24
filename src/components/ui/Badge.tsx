@@ -14,6 +14,7 @@ export const Badge = ({
   const variantClasses = {
     default: 'bg-primary/20 text-primary border border-primary/30',
     tiktok: 'badge-tiktok',
+    douyin: 'badge-douyin',
     facebook: 'badge-facebook',
     youtube: 'badge-youtube',
     success: 'badge-success',

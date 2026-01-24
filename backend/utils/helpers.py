@@ -10,6 +10,8 @@ def detect_platform(url):
         return 'facebook'
     elif 'youtube.com' in url or 'youtu.be' in url:
         return 'youtube'
+    elif 'douyin.com' in url:
+        return 'douyin'
     return 'unknown'
 
 import unicodedata

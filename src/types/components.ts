@@ -51,7 +51,7 @@ export interface InputProps extends BaseComponentProps {
  * Badge Props
  */
 export interface BadgeProps extends BaseComponentProps {
-  variant?: 'default' | 'tiktok' | 'facebook' | 'youtube' | 'success' | 'warning' | 'error' | 'info';
+  variant?: 'default' | 'tiktok' | 'facebook' | 'youtube' | 'douyin' | 'success' | 'warning' | 'error' | 'info';
   size?: 'sm' | 'md';
 }
 

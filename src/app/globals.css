@@ -302,6 +302,12 @@ textarea.input-field {
   border: 1px solid #ee1d52;
 }
 
+.badge-douyin {
+  background: rgba(0, 0, 0, 0.9);
+  color: #FE2C55;
+  border: 1px solid #FE2C55;
+}
+
 .badge-facebook {
   background: rgba(24, 119, 242, 0.15);
   color: #1877f2;

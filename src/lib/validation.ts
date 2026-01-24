@@ -57,7 +57,7 @@ export function validateVideoUrl(url: string): {
   
   const platform = detectPlatform(url);
   if (!platform) {
-    return { isValid: false, platform: null, error: 'Chỉ hỗ trợ TikTok, Facebook và YouTube' };
+    return { isValid: false, platform: null, error: 'Chỉ hỗ trợ TikTok, Facebook, YouTube và Douyin' };
   }
   
   return { isValid: true, platform };

@@ -2,7 +2,7 @@
 
 import type { Platform } from '@/types';
 import { Badge } from './ui';
-import { FacebookIcon, TikTokIcon, YouTubeIcon } from './ui/Icons';
+import { DouyinIcon, FacebookIcon, TikTokIcon, YouTubeIcon } from './ui/Icons';
 
 export const PlatformBadge = ({ platform, showIcon = true, className = '' }: {
   platform: Platform;
@@ -24,6 +24,11 @@ export const PlatformBadge = ({ platform, showIcon = true, className = '' }: {
       label: 'YouTube',
       icon: YouTubeIcon,
       variant: 'youtube' as const,
+    },
+    douyin: {
+      label: 'Douyin',
+      icon: DouyinIcon,
+      variant: 'douyin' as const,
     },
   };
 

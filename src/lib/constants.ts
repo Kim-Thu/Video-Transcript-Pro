@@ -19,6 +19,10 @@ export const PLATFORM_PATTERNS = {
     'youtube.com',
     'youtu.be',
   ],
+  douyin: [
+    'douyin.com',
+    'iesdouyin.com',
+  ],
 } as const;
 
 // API Configuration

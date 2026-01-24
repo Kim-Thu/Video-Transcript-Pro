@@ -1,7 +1,7 @@
 /**
  * Platform Types and Constants
  */
-export const SUPPORTED_PLATFORMS = ['tiktok', 'facebook', 'youtube'] as const;
+export const SUPPORTED_PLATFORMS = ['tiktok', 'facebook', 'youtube', 'douyin'] as const;
 export type Platform = (typeof SUPPORTED_PLATFORMS)[number];
 
 /**
