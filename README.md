@@ -1,8 +1,10 @@
 # 🎬 Video Transcript Pro
 
+**🌐 Language / Ngôn ngữ:** [English](README.md) | [Tiếng Việt](README.vi.md)
+
 A powerful web application to extract transcripts (subtitles) from **TikTok**, **Facebook**, and **YouTube** videos quickly and accurately.
 
-![Video Transcript Pro](https://via.placeholder.com/800x400?text=Video+Transcript+Pro)
+![Video Transcript Pro](docs/images/demo-screenshot.png)
 
 ## ✨ Features
 
