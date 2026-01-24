@@ -25,25 +25,25 @@ export const Header = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
-            {/* Platform Badges (Hidden on mobile to save space) */}
+          <div className="flex items-center gap-3">
+            {/* Platform Icons - Uniform size */}
             <div className="hidden md:flex items-center gap-2">
-              <span className="badge badge-tiktok">
-                <TikTokIcon className="w-3 h-3 mr-1" />
-                TikTok
-              </span>
-              <span className="badge badge-facebook">
-                <FacebookIcon className="w-3 h-3 mr-1" />
-                Facebook
-              </span>
-              <span className="badge badge-youtube">
-                <YouTubeIcon className="w-3 h-3 mr-1" />
-                YouTube
-              </span>
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-black/80 border border-[#ee1d52]">
+                <TikTokIcon className="w-4 h-4 text-[#ee1d52]" />
+                <span className="text-xs font-medium text-[#ee1d52]">TikTok</span>
+              </div>
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#1877f2]/10 border border-[#1877f2]/50">
+                <FacebookIcon className="w-4 h-4 text-[#1877f2]" />
+                <span className="text-xs font-medium text-[#1877f2]">Facebook</span>
+              </div>
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#ff0000]/10 border border-[#ff0000]/50">
+                <YouTubeIcon className="w-4 h-4 text-[#ff0000]" />
+                <span className="text-xs font-medium text-[#ff0000]">YouTube</span>
+              </div>
             </div>
 
             {/* Controls */}
-            <div className="flex items-center gap-1 pl-4">
+            <div className="flex items-center gap-1 pl-2 md:pl-4">
               <ThemeToggle />
               <LanguageSwitcher />
             </div>

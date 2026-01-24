@@ -120,7 +120,7 @@ export const TranscriptViewer = ({
           <div className="flex flex-col gap-1">
             <h3 className="font-semibold text-foreground">Transcript</h3>
             <div className="flex items-center gap-2 flex-wrap">
-              <p className="text-sm text-gray-400">{wordCount} {t('transcript.words')}</p>
+              <p className="text-sm text-secondary-text">{wordCount} {t('transcript.words')}</p>
               {isDemo && (
                 <Badge variant="warning" size="sm">Demo</Badge>
               )}
