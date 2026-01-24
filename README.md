@@ -1,20 +1,20 @@
 # 🎬 Video Transcript Pro
 
-Ứng dụng trích xuất transcript (phụ đề) từ video **TikTok**, **Facebook**, và **YouTube** một cách nhanh chóng và chính xác.
+A powerful web application to extract transcripts (subtitles) from **TikTok**, **Facebook**, and **YouTube** videos quickly and accurately.
 
 ![Video Transcript Pro](https://via.placeholder.com/800x400?text=Video+Transcript+Pro)
 
-## ✨ Tính năng
+## ✨ Features
 
-- � **Xử lý nhanh** - Sử dụng AI Gemini để transcript trong vài giây
-- 🌐 **Đa nền tảng** - Hỗ trợ TikTok, Facebook, YouTube
-- � **Xử lý hàng loạt** - Nhập nhiều link cùng lúc
-- 🌍 **Đa ngôn ngữ** - Giao diện Tiếng Việt & English
-- 🌙 **Dark/Light Mode** - Tùy chỉnh giao diện theo ý thích
-- � **Copy & Download** - Xuất transcript dễ dàng
-- � **Lịch sử** - Lưu trữ các transcript đã xử lý
+- 🚀 **Lightning Fast** - Powered by Gemini AI for transcription in seconds
+- 🌐 **Multi-Platform** - Supports TikTok, Facebook, and YouTube
+- 📦 **Batch Processing** - Process multiple video links at once
+- 🌍 **Multilingual UI** - Vietnamese & English interface
+- 🌙 **Dark/Light Mode** - Customize your viewing experience
+- 📋 **Copy & Download** - Export transcripts easily
+- 📜 **History** - Keep track of processed transcripts
 
-## 🛠️ Công nghệ sử dụng
+## 🛠️ Tech Stack
 
 ### Frontend
 - **Next.js 16** (App Router, Turbopack)
@@ -29,66 +29,66 @@
 - **Google Gemini AI** (Transcription & Translation)
 - **FFmpeg** (Audio extraction)
 
-## � Yêu cầu hệ thống
+## 📋 System Requirements
 
 - **Node.js** >= 18
 - **Python** >= 3.9
-- **FFmpeg** (cài đặt và thêm vào PATH)
+- **FFmpeg** (installed and added to PATH)
 
-## 🚀 Hướng dẫn cài đặt
+## 🚀 Installation Guide
 
-### 1. Clone repository
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/Kim-Thu/Video-Transcript-Pro.git
 cd Video-Transcript-Pro
 ```
 
-### 2. Cài đặt Frontend
+### 2. Setup Frontend
 
 ```bash
-# Cài đặt dependencies
+# Install dependencies
 npm install
 
-# Copy file env mẫu
+# Copy environment example file
 cp .env.example .env.local
 
-# Chạy development server
+# Start development server
 npm run dev
 ```
 
-Frontend sẽ chạy tại: `http://localhost:3000`
+Frontend will run at: `http://localhost:3000`
 
-### 3. Cài đặt Backend
+### 3. Setup Backend
 
 ```bash
 cd backend
 
-# Tạo virtual environment (khuyến nghị)
+# Create virtual environment (recommended)
 python -m venv .venv
 
-# Kích hoạt virtual environment
+# Activate virtual environment
 # Windows:
 .venv\Scripts\activate
 # macOS/Linux:
 source .venv/bin/activate
 
-# Cài đặt dependencies
+# Install dependencies
 pip install -r requirements.txt
 
-# Copy file env mẫu
+# Copy environment example file
 cp .env.example .env
 
-# (Optional) Thêm Gemini API Key vào .env
-# Hoặc có thể nhập trực tiếp trên giao diện
+# (Optional) Add your Gemini API Key to .env
+# Or you can enter it directly in the app UI
 
-# Chạy server
+# Start server
 python app.py
 ```
 
-Backend sẽ chạy tại: `http://localhost:5000`
+Backend will run at: `http://localhost:5000`
 
-## ⚙️ Cấu hình
+## ⚙️ Configuration
 
 ### Frontend (`.env.local`)
 
@@ -104,40 +104,63 @@ DEBUG=True
 GEMINI_API_KEY=your_gemini_api_key_here  # Optional
 ```
 
-## 🔑 Lấy Gemini API Key (Miễn phí)
+## 🔑 Getting a Gemini API Key (Free)
 
-1. Truy cập: https://aistudio.google.com/
-2. Đăng nhập bằng tài khoản Google
-3. Tạo API Key mới
-4. Copy key và dán vào file `.env` hoặc nhập trực tiếp trên giao diện ứng dụng
+1. Visit: https://aistudio.google.com/
+2. Sign in with your Google account
+3. Create a new API Key
+4. Copy the key and paste it into the `.env` file or enter it directly in the app UI
 
-## � Hướng dẫn sử dụng
+## 📖 Usage Guide
 
-### Xử lý đơn lẻ
-1. Dán link video TikTok/Facebook/YouTube vào ô input
-2. (Optional) Nhập Gemini API Key nếu chưa cấu hình
-3. Nhấn **"Lấy Transcript"**
-4. Chờ xử lý và xem kết quả
-5. Copy hoặc Download transcript
+### Single Video Processing
+1. Paste a TikTok/Facebook/YouTube video link into the input field
+2. (Optional) Enter your Gemini API Key if not configured
+3. Click **"Get Transcript"**
+4. Wait for processing and view the result
+5. Copy or Download the transcript
 
-### Xử lý hàng loạt
-1. Chuyển sang tab **"Hàng loạt"**
-2. Dán nhiều link (mỗi dòng một link)
-3. Nhấn **"Xử lý hàng loạt"**
-4. Theo dõi tiến độ và xem kết quả
+### Batch Processing
+1. Switch to the **"Batch"** tab
+2. Paste multiple links (one per line)
+3. Click **"Process Batch"**
+4. Monitor progress and view results
 
-## 🤝 Đóng góp
+## 🏗️ Project Structure
 
-Mọi đóng góp đều được hoan nghênh! Hãy tạo Pull Request hoặc Issue nếu bạn có ý tưởng cải thiện.
+```
+Video-Transcript-Pro/
+├── src/                    # Frontend source code
+│   ├── app/               # Next.js App Router
+│   ├── components/        # React components
+│   ├── contexts/          # React contexts (Theme, Language)
+│   ├── features/          # Feature-based components
+│   ├── hooks/             # Custom React hooks
+│   ├── lib/               # Utility functions
+│   ├── locales/           # i18n translations
+│   └── types/             # TypeScript types
+├── backend/               # Backend source code
+│   ├── core/              # Core workflow logic
+│   ├── models/            # Data models
+│   ├── routes/            # API routes
+│   ├── services/          # Business logic services
+│   └── utils/             # Utility functions
+├── public/                # Static assets
+└── README.md              # This file
+```
 
-## � License
+## 🤝 Contributing
 
-MIT License - Xem file [LICENSE](LICENSE) để biết thêm chi tiết.
+Contributions are welcome! Feel free to submit Pull Requests or create Issues for bug reports and feature requests.
 
-## 👨‍💻 Tác giả
+## 📄 License
+
+MIT License - See [LICENSE](LICENSE) file for details.
+
+## 👨‍💻 Author
 
 **Kim Thu** - [@Kim-Thu](https://github.com/Kim-Thu)
 
 ---
 
-⭐ Nếu thấy hữu ích, hãy cho repo một star nhé!
+⭐ If you find this project useful, please give it a star!
