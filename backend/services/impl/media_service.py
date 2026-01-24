@@ -21,6 +21,7 @@ class YtDlpMediaService(IMediaDownloader):
             'writeautomaticsub': True,
             'subtitlesformat': 'vtt',
             'subtitleslangs': ['all', '-live_chat'],
+            'cookiesfrombrowser': ('chrome', 'edge'), 
             'http_headers': {
                 'User-Agent': user_agent,
                 'Referer': 'https://www.douyin.com/' if 'douyin.com' in url else None

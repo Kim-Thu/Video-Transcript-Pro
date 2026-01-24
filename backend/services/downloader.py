@@ -59,7 +59,7 @@ def download_video_to_file(url, output_path):
         'writeautomaticsub': True,    # Tải phụ đề tự động (auto-generated)
         'subtitlesformat': 'vtt',     # Định dạng VTT
         'subtitleslangs': ['all', '-live_chat'], # Lấy tất cả ngôn ngữ
-        # 'cookiesfrombrowser': ('chrome',), # Tạm tắt do lỗi DPAPI trên một số máy Windows
+        'cookiesfrombrowser': ('chrome', 'edge'), # Thử lấy cookie từ Chrome/Edge để bypass
         'http_headers': {
             'User-Agent': user_agent,
             'Referer': 'https://www.douyin.com/' if 'douyin.com' in url else None
