@@ -1,7 +1,7 @@
 import os
 import uuid
-from typing import Optional
-from models.domain import ProcessingRequest, ProcessingResult, TranscriptSource
+from typing import Optional, List
+from models.domain import ProcessingRequest, ProcessingResult, TranscriptSource, TranscriptSegment
 from services.base import IMediaDownloader, IAIService, ISubtitleParser
 from services.impl.media_service import YtDlpMediaService
 from services.impl.ai_service import GeminiAIService
@@ -52,24 +52,27 @@ class TranscriptWorkflow:
             foreign_sub_path = next((s for s in subs if s != vietnamese_sub_path), None) if subs else None
             
             final_transcript = None
+            final_segments: List[TranscriptSegment] = []
             source_type = TranscriptSource.AI_TRANSCRIPTION
-            skip_foreign_translation = False  # Flag to force audio transcription
             
             # Strategy Decision
             if vietnamese_sub_path:
                 # TRUST Vietnamese Subtitles from ALL platforms (TikTok, Facebook, YouTube)
                 # This saves Gemini tokens and is faster
                 print(f"[{video_id}] Found Vietnamese Subtitle on {platform}. Using it directly.")
-                final_transcript = self.parser.parse(vietnamese_sub_path)
+                final_transcript, final_segments = self.parser.parse_with_timestamps(vietnamese_sub_path)
                 source_type = TranscriptSource.OFFICIAL_SUBTITLE
             
             # If no Vietnamese sub, try Foreign Sub Translation
             if not final_transcript and foreign_sub_path:
                 print(f"[{video_id}] Found Foreign Subtitle: {os.path.basename(foreign_sub_path)}")
-                raw_text = self.parser.parse(foreign_sub_path)
+                raw_text, foreign_segments = self.parser.parse_with_timestamps(foreign_sub_path)
                 if raw_text:
                     print(f"[{video_id}] Translating foreign subtitle...")
                     final_transcript = self.ai_service.translate_text(raw_text, 'Vietnamese', request.api_key)
+                    # Note: Translated segments lose individual timing, but we preserve structure
+                    # For translated content, we keep the original segments' timing
+                    final_segments = foreign_segments
                     source_type = TranscriptSource.TRANSLATED_SUBTITLE
             
             # 3. Fallback to Audio Transcription
@@ -78,12 +81,15 @@ class TranscriptWorkflow:
                 if self.downloader.extract_audio(downloaded_path, audio_path):
                      final_transcript = self.ai_service.transcribe_audio(audio_path, request.api_key)
                      source_type = TranscriptSource.AI_TRANSCRIPTION
+                     # AI transcription doesn't have timestamps, so segments remain empty
+                     final_segments = []
                 else:
                      raise Exception("Audio extraction failed")
 
             return ProcessingResult(
                 transcript=final_transcript or "",
                 source=source_type.value,
+                segments=final_segments,
                 is_demo=False
             )
 

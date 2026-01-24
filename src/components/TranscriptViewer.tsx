@@ -1,5 +1,6 @@
 'use client';
 
+import { useLanguage } from '@/contexts/LanguageContext';
 import { copyToClipboard, countWords, downloadTextFile } from '@/lib';
 import type { TranscriptViewerProps } from '@/types';
 import { useCallback, useMemo, useState } from 'react';
@@ -7,17 +8,34 @@ import { toast } from 'sonner';
 import { Badge, Button, Card } from './ui';
 
 /**
+ * Format seconds to MM:SS or HH:MM:SS format
+ */
+const formatTime = (seconds: number): string => {
+  const hrs = Math.floor(seconds / 3600);
+  const mins = Math.floor((seconds % 3600) / 60);
+  const secs = Math.floor(seconds % 60);
+
+  if (hrs > 0) {
+    return `${hrs}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  }
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
+};
+
+/**
  * Transcript Viewer Component
- * Now detects and displays demo mode warning
+ * Supports timestamp display with toggle
  */
 export const TranscriptViewer = ({
   transcript,
   videoTitle,
+  segments,
   onCopy,
   onDownload,
   className = '',
 }: TranscriptViewerProps) => {
+  const { t } = useLanguage();
   const [copied, setCopied] = useState(false);
+  const [showTimestamps, setShowTimestamps] = useState(true);
 
   // Detect if this is demo content
   const isDemo = useMemo(() => {
@@ -27,28 +45,48 @@ export const TranscriptViewer = ({
       transcript.includes('Để sử dụng tính năng transcript thực');
   }, [transcript]);
 
+  // Check if we have valid segments with timestamps
+  const hasTimestamps = useMemo(() => {
+    return segments && segments.length > 0;
+  }, [segments]);
+
   const wordCount = countWords(transcript);
 
   const handleCopy = useCallback(async () => {
-    const success = await copyToClipboard(transcript);
+    // If showing timestamps, include them in the copy
+    let textToCopy = transcript;
+    if (showTimestamps && hasTimestamps && segments) {
+      textToCopy = segments
+        .map(seg => `[${formatTime(seg.start)}] ${seg.text}`)
+        .join('\n');
+    }
+
+    const success = await copyToClipboard(textToCopy);
     if (success) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-
-      toast.success('Đã sao chép transcript!');
+      toast.success(t('transcript.copied'));
       onCopy?.();
     }
-  }, [transcript, onCopy]);
+  }, [transcript, segments, showTimestamps, hasTimestamps, onCopy, t]);
 
   const handleDownload = useCallback(() => {
+    // If showing timestamps, include them in the download
+    let textToDownload = transcript;
+    if (showTimestamps && hasTimestamps && segments) {
+      textToDownload = segments
+        .map(seg => `[${formatTime(seg.start)}] ${seg.text}`)
+        .join('\n');
+    }
+
     const filename = videoTitle
       ? `transcript-${videoTitle.slice(0, 30).replace(/[^a-zA-Z0-9]/g, '_')}.txt`
       : `transcript-${Date.now()}.txt`;
 
-    downloadTextFile(transcript, filename);
-    toast.success('Đang tải xuống file...');
+    downloadTextFile(textToDownload, filename);
+    toast.success(t('transcript.downloading'));
     onDownload?.();
-  }, [transcript, videoTitle, onDownload]);
+  }, [transcript, segments, videoTitle, showTimestamps, hasTimestamps, onDownload, t]);
 
   return (
     <Card className={`animate-fade-in ${className}`}>
@@ -62,10 +100,9 @@ export const TranscriptViewer = ({
               </svg>
             </div>
             <div>
-              <h4 className="font-semibold text-warning mb-1">Chế độ Demo</h4>
+              <h4 className="font-semibold text-warning mb-1">{t('transcript.demo_mode')}</h4>
               <p className="text-sm text-gray-400 leading-relaxed">
-                Không thể tải hoặc xử lý video. Đây là nội dung mẫu.
-                Hãy thử với một link TikTok/Facebook <strong>công khai, thực sự tồn tại</strong>.
+                {t('transcript.demo_message')}
               </p>
             </div>
           </div>
@@ -80,22 +117,46 @@ export const TranscriptViewer = ({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
           </div>
-          <div className="flex flex-col items-center gap-2">
+          <div className="flex flex-col gap-1">
             <h3 className="font-semibold text-foreground">Transcript</h3>
-            <div className="flex items-center gap-2">
-              <p className="text-sm text-gray-400">{wordCount} từ</p>
+            <div className="flex items-center gap-2 flex-wrap">
+              <p className="text-sm text-gray-400">{wordCount} {t('transcript.words')}</p>
               {isDemo && (
                 <Badge variant="warning" size="sm">Demo</Badge>
               )}
               {!isDemo && (
                 <Badge variant="success" size="sm">Live</Badge>
               )}
+              {hasTimestamps && (
+                <Badge variant="info" size="sm">
+                  <svg className="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  {t('transcript.timed')}
+                </Badge>
+              )}
             </div>
           </div>
         </div>
 
         {/* Actions */}
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
+          {/* Timestamp Toggle */}
+          {hasTimestamps && (
+            <Button
+              variant={showTimestamps ? "primary" : "secondary"}
+              size="sm"
+              onClick={() => setShowTimestamps(!showTimestamps)}
+              leftIcon={
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              }
+            >
+              {showTimestamps ? t('transcript.hide_time') : t('transcript.show_time')}
+            </Button>
+          )}
+
           <Button
             variant="secondary"
             size="sm"
@@ -112,7 +173,7 @@ export const TranscriptViewer = ({
               )
             }
           >
-            {copied ? 'Đã copy!' : 'Copy'}
+            {copied ? t('transcript.copied_btn') : 'Copy'}
           </Button>
 
           <Button
@@ -125,16 +186,40 @@ export const TranscriptViewer = ({
               </svg>
             }
           >
-            Tải xuống
+            {t('transcript.download')}
           </Button>
         </div>
       </div>
 
       {/* Content */}
       <div className={`rounded-xl p-4 max-h-96 overflow-y-auto ${isDemo ? 'bg-warning/5 border border-warning/10' : 'bg-secondary/50'}`}>
-        <p className="text-foreground leading-relaxed whitespace-pre-wrap">
-          {transcript}
-        </p>
+        {showTimestamps && hasTimestamps && segments ? (
+          // Timed segments view
+          <div className="space-y-3">
+            {segments.map((segment, index) => (
+              <div
+                key={index}
+                className="flex gap-3 group hover:bg-primary/5 rounded-lg p-2 -m-2 transition-colors"
+              >
+                {/* Timestamp badge */}
+                <div className="shrink-0">
+                  <span className="inline-flex items-center px-2 py-1 rounded-md bg-primary/10 text-primary text-xs font-mono font-medium">
+                    {formatTime(segment.start)}
+                  </span>
+                </div>
+                {/* Text content */}
+                <p className="text-foreground leading-relaxed flex-1">
+                  {segment.text}
+                </p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          // Plain text view
+          <p className="text-foreground leading-relaxed whitespace-pre-wrap">
+            {transcript}
+          </p>
+        )}
       </div>
     </Card>
   );

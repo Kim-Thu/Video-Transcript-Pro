@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Optional, List, Tuple
-from models.domain import VideoMetadata
+from models.domain import VideoMetadata, TranscriptSegment
 
 class IMediaDownloader(ABC):
     @abstractmethod
@@ -33,4 +33,9 @@ class ISubtitleParser(ABC):
     @abstractmethod
     def parse(self, file_path: str) -> Optional[str]:
         """Parse subtitle file and return clean text."""
+        pass
+    
+    @abstractmethod
+    def parse_with_timestamps(self, file_path: str) -> Tuple[str, List[TranscriptSegment]]:
+        """Parse subtitle file and return (clean text, list of timed segments)."""
         pass

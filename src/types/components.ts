@@ -49,7 +49,7 @@ export interface InputProps extends BaseComponentProps {
  * Badge Props
  */
 export interface BadgeProps extends BaseComponentProps {
-  variant?: 'default' | 'tiktok' | 'facebook' | 'youtube' | 'success' | 'warning' | 'error';
+  variant?: 'default' | 'tiktok' | 'facebook' | 'youtube' | 'success' | 'warning' | 'error' | 'info';
   size?: 'sm' | 'md';
 }
 
@@ -82,12 +82,15 @@ export interface VideoPreviewProps extends BaseComponentProps {
   layoutMode?: 'horizontal' | 'vertical';
 }
 
+import type { TranscriptSegment } from './api';
+
 /**
  * Transcript Viewer Props
  */
 export interface TranscriptViewerProps extends BaseComponentProps {
   transcript: string;
   videoTitle?: string;
+  segments?: TranscriptSegment[];
   onCopy?: () => void;
   onDownload?: () => void;
 }

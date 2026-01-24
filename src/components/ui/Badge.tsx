@@ -19,6 +19,7 @@ export const Badge = ({
     success: 'badge-success',
     warning: 'badge-processing',
     error: 'badge-error',
+    info: 'bg-blue-500/20 text-blue-400 border border-blue-500/30',
   };
 
   const sizeClasses = {

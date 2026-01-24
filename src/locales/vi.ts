@@ -58,6 +58,18 @@ export const vi = {
       desc: 'Sao chép hoặc tải xuống nội dung transcript chỉ với một cú click.',
     },
   },
+  transcript: {
+    copied: 'Đã sao chép transcript!',
+    downloading: 'Đang tải xuống file...',
+    demo_mode: 'Chế độ Demo',
+    demo_message: 'Không thể tải hoặc xử lý video. Đây là nội dung mẫu. Hãy thử với một link TikTok/Facebook công khai, thực sự tồn tại.',
+    words: 'từ',
+    timed: 'Có thời gian',
+    hide_time: 'Ẩn thời gian',
+    show_time: 'Hiện thời gian',
+    copied_btn: 'Đã copy!',
+    download: 'Tải xuống',
+  },
   footer: {
     copyright: '© 2026 Video Transcript Pro. Được xây dựng với ❤️ bằng Next.js và Flask.',
   }

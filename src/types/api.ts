@@ -32,17 +32,24 @@ export interface VideoInfoResponse {
 }
 
 /**
+ * Transcript Segment with timing information
+ */
+export interface TranscriptSegment {
+  readonly start: number;  // Start time in seconds
+  readonly end: number;    // End time in seconds
+  readonly text: string;   // The transcript text
+}
+
+/**
  * Transcript API Response
  */
 export interface TranscriptResponse {
   readonly transcript: string;
-  readonly segments?: Array<{
-    start: number;
-    end: number;
-    text: string;
-  }>;
+  readonly segments?: TranscriptSegment[];
+  readonly source?: string;
   readonly language?: string;
   readonly confidence?: number;
+  readonly isDemo?: boolean;
 }
 
 /**

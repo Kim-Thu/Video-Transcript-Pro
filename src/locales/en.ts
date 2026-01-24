@@ -58,6 +58,18 @@ export const en = {
       desc: 'Copy or download transcript content with just a single click.',
     },
   },
+  transcript: {
+    copied: 'Transcript copied!',
+    downloading: 'Downloading file...',
+    demo_mode: 'Demo Mode',
+    demo_message: 'Unable to download or process video. This is sample content. Try with a real, public TikTok/Facebook link.',
+    words: 'words',
+    timed: 'Timed',
+    hide_time: 'Hide time',
+    show_time: 'Show time',
+    copied_btn: 'Copied!',
+    download: 'Download',
+  },
   footer: {
     copyright: '© 2026 Video Transcript Pro. Built with ❤️ using Next.js and Flask.',
   }

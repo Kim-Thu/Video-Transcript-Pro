@@ -31,7 +31,15 @@ def get_transcript():
             'data': {
                 'transcript': result.transcript,
                 'isDemo': result.is_demo,
-                'source': result.source
+                'source': result.source,
+                'segments': [
+                    {
+                        'start': seg.start,
+                        'end': seg.end,
+                        'text': seg.text
+                    }
+                    for seg in result.segments
+                ] if result.segments else None
             }
         })
 

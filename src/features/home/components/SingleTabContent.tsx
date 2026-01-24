@@ -11,6 +11,8 @@ import { FC, FormEvent } from 'react';
 import { ApiKeyInput } from './ApiKeyInput';
 import { TranscriptError } from './TranscriptError';
 
+import { TranscriptSegment } from '@/types';
+
 interface TranscriptState {
     url: string;
     setUrl: (url: string) => void;
@@ -21,6 +23,7 @@ interface TranscriptState {
     error: string | null;
     videoInfo: any | null;
     transcript: string | null;
+    segments?: TranscriptSegment[] | null;
     processUrl: () => void;
 }
 
@@ -108,6 +111,7 @@ export const SingleTabContent: FC<SingleTabContentProps> = ({
                             <TranscriptViewer
                                 transcript={transcript.transcript}
                                 videoTitle={transcript.videoInfo?.title}
+                                segments={transcript.segments || undefined}
                                 className="h-full shadow-lg border-opacity-50"
                             />
                         ) : null}

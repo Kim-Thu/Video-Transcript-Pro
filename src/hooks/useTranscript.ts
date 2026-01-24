@@ -3,7 +3,7 @@
 import { apiClient } from '@/lib/api-client';
 import { generateId } from '@/lib/browser';
 import { validateVideoUrl } from '@/lib/validation';
-import type { Platform, TranscriptItem, VideoInfo } from '@/types';
+import type { Platform, TranscriptItem, TranscriptSegment, VideoInfo } from '@/types';
 import { useCallback, useState } from 'react';
 
 /**
@@ -18,6 +18,7 @@ export function useTranscript(onComplete?: (item: TranscriptItem) => void) {
   const [error, setError] = useState<string | null>(null);
   const [videoInfo, setVideoInfo] = useState<VideoInfo | null>(null);
   const [transcript, setTranscript] = useState<string | null>(null);
+  const [segments, setSegments] = useState<TranscriptSegment[] | null>(null);
   
   // Clear error when URL changes
   const handleUrlChange = useCallback((value: string) => {
@@ -31,6 +32,7 @@ export function useTranscript(onComplete?: (item: TranscriptItem) => void) {
     setError(null);
     setVideoInfo(null);
     setTranscript(null);
+    setSegments(null);
     setIsLoading(false);
     setIsProcessing(false);
   }, []);
@@ -43,6 +45,7 @@ export function useTranscript(onComplete?: (item: TranscriptItem) => void) {
       setError(validation.error || 'Link không hợp lệ');
       setVideoInfo(null);
       setTranscript(null);
+      setSegments(null);
       setIsLoading(false);
       setIsProcessing(false);
       return;
@@ -54,6 +57,7 @@ export function useTranscript(onComplete?: (item: TranscriptItem) => void) {
     setError(null);
     setVideoInfo(null);
     setTranscript(null);
+    setSegments(null);
     
     try {
       // Step 1: Get video info from API
@@ -89,7 +93,9 @@ export function useTranscript(onComplete?: (item: TranscriptItem) => void) {
       }
       
       const transcriptText = transcriptResponse.data.transcript;
+      const transcriptSegments = transcriptResponse.data.segments || null;
       setTranscript(transcriptText);
+      setSegments(transcriptSegments);
       
       // Create history item
       const item: TranscriptItem = {
@@ -157,6 +163,7 @@ export function useTranscript(onComplete?: (item: TranscriptItem) => void) {
 Video này nói về nhiều chủ đề thú vị và hữu ích. Nội dung được xử lý bằng công nghệ AI tiên tiến để chuyển đổi giọng nói thành văn bản một cách chính xác.`;
     
     setTranscript(mockTranscript);
+    setSegments(null); // Demo mode has no segments
     setError('⚠️ Đang ở chế độ demo. Chạy backend để xem transcript thực.');
     
     const item: TranscriptItem = {
@@ -177,6 +184,7 @@ Video này nói về nhiều chủ đề thú vị và hữu ích. Nội dung đ
     setUrl(item.videoInfo.url);
     setVideoInfo(item.videoInfo);
     setTranscript(item.transcript || null);
+    setSegments(null); // History items don't have segments stored yet
     setError(null);
     setIsLoading(false);
     setIsProcessing(false);
@@ -192,6 +200,7 @@ Video này nói về nhiều chủ đề thú vị và hữu ích. Nội dung đ
     error,
     videoInfo,
     transcript,
+    segments,
     processUrl,
     reset,
     loadItem,
@@ -199,3 +208,4 @@ Video này nói về nhiều chủ đề thú vị và hữu ích. Nội dung đ
     isBusy: isLoading || isProcessing,
   };
 }
+
