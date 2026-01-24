@@ -19,9 +19,9 @@ export const Input = ({
   const hasValue = value.length > 0;
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative ${className} ${error ? 'pb-6' : ''}`}>
       {leftIcon && (
-        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary-text">
+        <div className="absolute left-4 top-[26px] -translate-y-1/2 text-secondary-text">
           {leftIcon}
         </div>
       )}
@@ -44,7 +44,7 @@ export const Input = ({
         <button
           type="button"
           onClick={onClear}
-          className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary-text hover:text-foreground transition-colors"
+          className="absolute right-4 top-[26px] -translate-y-1/2 text-secondary-text hover:text-foreground transition-colors"
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -53,13 +53,13 @@ export const Input = ({
       )}
 
       {rightIcon && (
-        <div className="absolute right-4 top-1/2 -translate-y-1/2 text-secondary-text">
+        <div className="absolute right-4 top-[26px] -translate-y-1/2 text-secondary-text">
           {rightIcon}
         </div>
       )}
 
       {error && (
-        <p className="mt-1.5 text-sm text-error">{error}</p>
+        <p className="absolute bottom-0 left-0 text-sm text-error truncate w-full" title={error}>{error}</p>
       )}
     </div>
   );

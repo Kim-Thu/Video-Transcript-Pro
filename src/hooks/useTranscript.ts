@@ -114,8 +114,13 @@ export function useTranscript(onComplete?: (item: TranscriptItem) => void) {
       setError(errorMessage);
       
       // Fallback to demo if API fails
-      console.warn('API failed, using demo data:', errorMessage);
-      await useDemoFallback(platform);
+      // console.warn('API failed, using demo data:', errorMessage);
+      // await useDemoFallback(platform);
+      
+      // Instead, just show the error and stop
+      setIsProcessing(false);
+      setIsLoading(false);
+      return;
       
     } finally {
       setIsLoading(false);
