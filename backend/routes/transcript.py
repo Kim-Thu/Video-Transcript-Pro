@@ -45,6 +45,12 @@ def get_transcript():
 
     except Exception as e:
         print(f"Workflow Error: {str(e)}")
-        # In a real app, we might map exception types to status codes
-        return jsonify({'success': False, 'error': str(e)}), 500
+        error_msg = str(e)
+        status_code = 500
+        
+        # Map common errors to 400 Bad Request
+        if "Download failed" in error_msg or "unsupported" in error_msg.lower() or "not valid" in error_msg.lower():
+            status_code = 400
+            
+        return jsonify({'success': False, 'error': error_msg}), status_code
 
