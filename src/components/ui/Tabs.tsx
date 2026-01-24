@@ -23,7 +23,7 @@ export const Tabs = ({
             {tab.icon && <span className="flex-shrink-0">{tab.icon}</span>}
             {tab.label}
             {typeof tab.badge === 'number' && tab.badge > 0 && (
-              <span className="bg-primary/20 text-primary text-xs px-2 py-0.5 rounded-full">
+              <span className="bg-white text-primary text-xs px-2 py-0.5 rounded-full">
                 {tab.badge}
               </span>
             )}
