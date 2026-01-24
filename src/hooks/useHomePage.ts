@@ -83,9 +83,17 @@ export const useHomePage = () => {
   }, [transcript]);
 
   const handleClearHistory = useCallback(() => {
-    if (confirm('Bạn có chắc muốn xóa tất cả lịch sử?')) {
-      history.clearAll();
-    }
+    toast('Bạn có chắc muốn xóa tất cả lịch sử?', {
+      action: {
+        label: 'Xóa',
+        onClick: () => {
+          history.clearAll();
+          toast.success('Đã xóa toàn bộ lịch sử');
+        },
+      },
+      description: 'Hành động này không thể hoàn tác.',
+      duration: 5000,
+    });
   }, [history]);
 
   const handleDownloadVideo = useCallback(() => {
