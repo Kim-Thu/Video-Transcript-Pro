@@ -17,7 +17,10 @@ def get_video_info_endpoint():
         
     info = get_video_info(url)
     if not info:
-         return jsonify({'success': False, 'error': 'Could not fetch video info'}), 500
+         return jsonify({
+             'success': False, 
+             'error': 'Không thể lấy thông tin video. Link có thể không đúng format, bị chặn, hoặc là video riêng tư.'
+         }), 400
          
     return jsonify({'success': True, 'data': info})
 

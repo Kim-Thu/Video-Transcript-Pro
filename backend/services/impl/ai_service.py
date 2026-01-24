@@ -53,7 +53,7 @@ class GeminiAIService(IAIService):
             response = None
             last_err = None
             
-            # Use Plain Text Prompt as requested by user
+            # Plain Text Prompt
             prompt = "Hãy nghe thật kỹ và tạo transcript tiếng Việt chi tiết, chính xác từng từ cho file âm thanh này. Tuyệt đối không tóm tắt, không thêm lời dẫn, chỉ ghi lại lời thoại."
 
             for m_name in model_names:
