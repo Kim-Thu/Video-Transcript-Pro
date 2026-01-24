@@ -441,3 +441,46 @@ input:disabled,
     @apply py-2.5 px-3 text-sm;
   }
 }
+
+/* Tailwind Utility Classes for Theme Colors */
+@layer utilities {
+  .text-foreground {
+    color: var(--color-foreground);
+  }
+  
+  .text-secondary-text {
+    color: var(--color-secondary-text);
+  }
+  
+  .text-muted {
+    color: var(--color-muted);
+  }
+  
+  .text-primary {
+    color: var(--color-primary);
+  }
+  
+  .text-accent {
+    color: var(--color-accent);
+  }
+  
+  .text-success {
+    color: var(--color-success);
+  }
+  
+  .text-warning {
+    color: var(--color-warning);
+  }
+  
+  .text-error {
+    color: var(--color-error);
+  }
+  
+  .bg-secondary {
+    background-color: var(--color-secondary);
+  }
+  
+  .border-error {
+    border-color: var(--color-error);
+  }
+}

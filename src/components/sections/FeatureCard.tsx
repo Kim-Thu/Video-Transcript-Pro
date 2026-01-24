@@ -15,6 +15,6 @@ export const FeatureCard = ({ icon, title, description, gradient, iconColor }: F
       {icon}
     </div>
     <h3 className="text-lg font-semibold text-foreground mb-2">{title}</h3>
-    <p className="text-gray-400 text-sm">{description}</p>
+    <p className="text-secondary-text text-sm">{description}</p>
   </Card>
 );
