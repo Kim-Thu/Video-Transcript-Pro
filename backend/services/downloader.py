@@ -4,11 +4,17 @@ from config import DOWNLOAD_DIR
 
 def get_video_info(url):
     """Get video information using yt-dlp"""
+    # Use Mobile UA for Douyin to bypass some checks
+    user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'
+    if 'douyin.com' in url:
+        user_agent = 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36'
+
     ydl_opts = {
         'quiet': True,
         'no_warnings': True,
         'http_headers': {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'
+            'User-Agent': user_agent,
+            'Referer': 'https://www.douyin.com/' if 'douyin.com' in url else None
         }
     }
     try:
@@ -40,6 +46,10 @@ def download_video_to_file(url, output_path):
     Returns the absolute path of the downloaded file or None.
     """
     # Cấu hình các tùy chọn cho yt-dlp
+    user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'
+    if 'douyin.com' in url:
+        user_agent = 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36'
+
     ydl_opts = {
         'format': 'bestvideo+bestaudio/best',
         'outtmpl': output_path,
@@ -51,7 +61,8 @@ def download_video_to_file(url, output_path):
         'subtitleslangs': ['all', '-live_chat'], # Lấy tất cả ngôn ngữ
         # 'cookiesfrombrowser': ('chrome',), # Tạm tắt do lỗi DPAPI trên một số máy Windows
         'http_headers': {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'
+            'User-Agent': user_agent,
+            'Referer': 'https://www.douyin.com/' if 'douyin.com' in url else None
         }
     }
 

@@ -8,6 +8,10 @@ from services.base import IMediaDownloader
 
 class YtDlpMediaService(IMediaDownloader):
     def download_video(self, url: str, output_path: str) -> Optional[str]:
+        user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'
+        if 'douyin.com' in url:
+            user_agent = 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36'
+
         ydl_opts = {
             'format': 'bestvideo+bestaudio/best',
             'outtmpl': output_path,
@@ -18,7 +22,8 @@ class YtDlpMediaService(IMediaDownloader):
             'subtitlesformat': 'vtt',
             'subtitleslangs': ['all', '-live_chat'],
             'http_headers': {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'
+                'User-Agent': user_agent,
+                'Referer': 'https://www.douyin.com/' if 'douyin.com' in url else None
             }
         }
 
