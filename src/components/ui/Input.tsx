@@ -15,13 +15,20 @@ export const Input = ({
   rightIcon,
   onClear,
   className = '',
+  size = 'md',
 }: InputProps) => {
   const hasValue = value.length > 0;
+
+  const sizeClasses = {
+    sm: 'h-8 text-xs',
+    md: 'h-10 text-sm',
+    lg: 'h-[52px] text-[15px] px-5',
+  };
 
   return (
     <div className={`relative ${className} ${error ? 'pb-6' : ''}`}>
       {leftIcon && (
-        <div className="absolute left-4 top-[26px] -translate-y-1/2 text-secondary-text">
+        <div className={`absolute left-4 top-[50%] -translate-y-1/2 text-secondary-text ${size === 'lg' ? '' : ''}`}>
           {leftIcon}
         </div>
       )}
@@ -34,6 +41,7 @@ export const Input = ({
         disabled={disabled}
         className={`
           input-field w-full
+          ${sizeClasses[size]}
           ${leftIcon ? 'pl-12' : ''}
           ${rightIcon || (onClear && hasValue) ? 'pr-12' : ''}
           ${error ? 'border-error focus:border-error focus:ring-error/20' : ''}

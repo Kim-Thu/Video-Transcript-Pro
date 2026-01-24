@@ -44,6 +44,7 @@ export interface InputProps extends BaseComponentProps {
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
   onClear?: () => void;
+  size?: 'sm' | 'md' | 'lg';
 }
 
 /**

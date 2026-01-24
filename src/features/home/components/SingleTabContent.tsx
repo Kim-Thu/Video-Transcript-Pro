@@ -60,6 +60,7 @@ export const SingleTabContent: FC<SingleTabContentProps> = ({
                                 disabled={transcript.isBusy}
                                 error={transcript.error || undefined}
                                 onClear={() => transcript.setUrl('')}
+                                size="lg"
                             />
                         </div>
                         <Button
@@ -69,6 +70,7 @@ export const SingleTabContent: FC<SingleTabContentProps> = ({
                             loading={transcript.isBusy}
                             leftIcon={!transcript.isBusy && <BoltIcon />}
                             className="min-w-[160px]"
+                            size="lg"
                         >
                             {transcript.isLoading ? t('common.loading') :
                                 transcript.isProcessing ? t('common.processing') : t('single.button')}

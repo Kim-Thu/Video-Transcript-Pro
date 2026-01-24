@@ -30,9 +30,9 @@ export const Button = ({
   };
 
   const sizeClasses = {
-    sm: 'px-3 py-1.5 text-sm gap-1.5',
-    md: 'px-5 py-2.5 text-sm gap-2',
-    lg: 'px-6 py-3 text-base gap-2.5',
+    sm: 'h-8 px-3 text-xs gap-1.5',
+    md: 'h-10 px-4 text-sm gap-2',
+    lg: 'h-[52px] px-6 text-[15px] gap-2.5',
   };
 
   return (
