@@ -52,6 +52,7 @@ class TranscriptWorkflow:
             final_transcript = None
             final_segments: List[TranscriptSegment] = []
             source_type = TranscriptSource.AI_TRANSCRIPTION
+            token_usage = None
             
             # Strategy Decision
             if vietnamese_sub_path:
@@ -65,7 +66,10 @@ class TranscriptWorkflow:
                 raw_text, foreign_segments = self.parser.parse_with_timestamps(foreign_sub_path)
                 if raw_text:
                     print(f"[{video_id}] Translating foreign subtitle...")
-                    final_transcript = self.ai_service.translate_text(raw_text, 'Vietnamese', request.api_key)
+                    ai_res = self.ai_service.translate_text(raw_text, 'Vietnamese', request.api_key)
+                    final_transcript = ai_res.text
+                    token_usage = ai_res.usage
+                    
                     # Note: Translated segments lose individual timing if we don't translate segment by segment
                     # For now, we reuse original timings with translated text if possible
                     # But translate_text full body might lose alignment.
@@ -79,24 +83,27 @@ class TranscriptWorkflow:
                 print(f"[{video_id}] No usable subtitle. Extracting and Transcribing Audio...")
                 if self.downloader.extract_audio(downloaded_path, audio_path):
                      print(f"[{video_id}] Audio extracted. Calling AI Service...")
-                     ai_response = self.ai_service.transcribe_audio(audio_path, request.api_key)
+                     ai_res = self.ai_service.transcribe_audio(audio_path, request.api_key)
                      
+                     token_usage = ai_res.usage
+                     ai_text = ai_res.text
                      source_type = TranscriptSource.AI_TRANSCRIPTION
                      
                      # Try to parse VTT from AI response
                      try:
-                        parsed_text, parsed_segments = self.parser.parse_content(ai_response)
+                        parsed_text, parsed_segments = self.parser.parse_content(ai_text)
                         if parsed_segments:
                             final_transcript = parsed_text
                             final_segments = parsed_segments
                             print(f"[{video_id}] AI returned VTT with {len(parsed_segments)} segments.")
                         else:
-                            final_transcript = ai_response
+                            # Fallback: AI might have returned plain text
+                            final_transcript = ai_text
                             final_segments = []
                             print(f"[{video_id}] AI returned text without valid VTT segments.")
                      except Exception as e:
                         print(f"[{video_id}] Failed to parse AI VTT: {e}")
-                        final_transcript = ai_response
+                        final_transcript = ai_text
                         final_segments = []
                 else:
                      print(f"[{video_id}] Audio extraction failed")
@@ -106,7 +113,8 @@ class TranscriptWorkflow:
                 transcript=final_transcript or "",
                 source=source_type.value,
                 segments=final_segments,
-                is_demo=False
+                is_demo=False,
+                token_usage=token_usage
             )
 
         except Exception as e:

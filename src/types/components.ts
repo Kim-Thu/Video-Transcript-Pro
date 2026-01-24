@@ -95,6 +95,7 @@ export interface TranscriptViewerProps extends BaseComponentProps {
   segments?: TranscriptSegment[];
   onCopy?: () => void;
   onDownload?: () => void;
+  tokenUsage?: any;
 }
 
 /**

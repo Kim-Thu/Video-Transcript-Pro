@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Optional, List, Tuple
-from models.domain import VideoMetadata, TranscriptSegment
+from models.domain import VideoMetadata, TranscriptSegment, AIResponse
 
 class IMediaDownloader(ABC):
     @abstractmethod
@@ -20,12 +20,12 @@ class IMediaDownloader(ABC):
 
 class IAIService(ABC):
     @abstractmethod
-    def transcribe_audio(self, audio_path: str, api_key: str) -> str:
+    def transcribe_audio(self, audio_path: str, api_key: str) -> AIResponse:
         """Transcribe audio file to text."""
         pass
 
     @abstractmethod
-    def translate_text(self, text: str, target_lang: str, api_key: str) -> str:
+    def translate_text(self, text: str, target_lang: str, api_key: str) -> AIResponse:
         """Translate text to target language."""
         pass
 

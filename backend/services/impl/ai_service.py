@@ -3,9 +3,10 @@ import time
 import google.generativeai as genai
 from services.base import IAIService
 from config import GEMINI_API_KEY
+from models.domain import AIResponse
 import warnings
 
-# Suppress the 2026 deprecation warnings
+# Suppress warnings
 warnings.filterwarnings("ignore", category=FutureWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
 
@@ -19,14 +20,12 @@ class GeminiAIService(IAIService):
             raise ValueError("API Key is required for Gemini Service")
         
         genai.configure(api_key=key)
-        
-        # Fallback strategy for models if one fails (not fully implemented here but structured for it)
         return genai.GenerativeModel(model_name)
 
-    def transcribe_audio(self, audio_path: str, api_key: str) -> str:
+    def transcribe_audio(self, audio_path: str, api_key: str) -> AIResponse:
         key = api_key or self.default_key
         if not key:
-            return "Error: No API Key provided."
+            return AIResponse(text="Error: No API Key provided.")
 
         try:
             print(f"🚀 [Gemini] Uploading audio: {os.path.basename(audio_path)}")
@@ -54,13 +53,13 @@ class GeminiAIService(IAIService):
             response = None
             last_err = None
             
+            # Use Plain Text Prompt as requested by user
             prompt = "Hãy nghe thật kỹ và tạo transcript tiếng Việt chi tiết, chính xác từng từ cho file âm thanh này. Tuyệt đối không tóm tắt, không thêm lời dẫn, chỉ ghi lại lời thoại."
 
             for m_name in model_names:
                 try:
                     model = genai.GenerativeModel(m_name)
                     response = model.generate_content([prompt, audio_file])
-
                     break
                 except Exception as e:
                     last_err = e
@@ -69,16 +68,25 @@ class GeminiAIService(IAIService):
             if not response:
                 raise last_err
 
-            return response.text.strip()
+            # Extract Token Usage
+            usage = None
+            if hasattr(response, 'usage_metadata'):
+                usage = {
+                    'prompt_tokens': response.usage_metadata.prompt_token_count,
+                    'completion_tokens': response.usage_metadata.candidates_token_count,
+                    'total_tokens': response.usage_metadata.total_token_count
+                }
+
+            return AIResponse(text=response.text.strip(), usage=usage)
 
         except Exception as e:
             print(f"❌ [Gemini Transcribe Error]: {e}")
-            return f"Error: {str(e)}"
+            return AIResponse(text=f"Error: {str(e)}")
 
-    def translate_text(self, text: str, target_lang: str, api_key: str) -> str:
+    def translate_text(self, text: str, target_lang: str, api_key: str) -> AIResponse:
         key = api_key or self.default_key
         if not key:
-            return text
+            return AIResponse(text=text)
 
         try:
             genai.configure(api_key=key)
@@ -87,7 +95,16 @@ class GeminiAIService(IAIService):
             prompt = f"Translate this transcript to {target_lang} naturally. Output ONLY the translation:\n\n{text}"
             
             response = model.generate_content(prompt)
-            return response.text.strip()
+            
+            usage = None
+            if hasattr(response, 'usage_metadata'):
+                usage = {
+                    'prompt_tokens': response.usage_metadata.prompt_token_count,
+                    'completion_tokens': response.usage_metadata.candidates_token_count,
+                    'total_tokens': response.usage_metadata.total_token_count
+                }
+                
+            return AIResponse(text=response.text.strip(), usage=usage)
         except Exception as e:
-            print(f"❌ [Gemini Translate Error]: {e}")
-            return text
+            print(f"❌ [Gemini Translate Error]: {e}", flush=True)
+            return AIResponse(text=text)

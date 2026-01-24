@@ -24,6 +24,7 @@ interface TranscriptState {
     videoInfo: any | null;
     transcript: string | null;
     segments?: TranscriptSegment[] | null;
+    tokenUsage?: any;
     processUrl: () => void;
 }
 
@@ -114,6 +115,7 @@ export const SingleTabContent: FC<SingleTabContentProps> = ({
                                 transcript={transcript.transcript}
                                 videoTitle={transcript.videoInfo?.title}
                                 segments={transcript.segments || undefined}
+                                tokenUsage={transcript.tokenUsage}
                                 className="h-full shadow-lg border-opacity-50"
                             />
                         ) : null}

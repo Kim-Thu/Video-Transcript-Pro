@@ -19,6 +19,7 @@ export function useTranscript(onComplete?: (item: TranscriptItem) => void) {
   const [videoInfo, setVideoInfo] = useState<VideoInfo | null>(null);
   const [transcript, setTranscript] = useState<string | null>(null);
   const [segments, setSegments] = useState<TranscriptSegment[] | null>(null);
+  const [tokenUsage, setTokenUsage] = useState<any | null>(null);
   
   // Clear error when URL changes
   const handleUrlChange = useCallback((value: string) => {
@@ -33,6 +34,7 @@ export function useTranscript(onComplete?: (item: TranscriptItem) => void) {
     setVideoInfo(null);
     setTranscript(null);
     setSegments(null);
+    setTokenUsage(null);
     setIsLoading(false);
     setIsProcessing(false);
   }, []);
@@ -46,6 +48,7 @@ export function useTranscript(onComplete?: (item: TranscriptItem) => void) {
       setVideoInfo(null);
       setTranscript(null);
       setSegments(null);
+      setTokenUsage(null);
       setIsLoading(false);
       setIsProcessing(false);
       return;
@@ -58,6 +61,7 @@ export function useTranscript(onComplete?: (item: TranscriptItem) => void) {
     setVideoInfo(null);
     setTranscript(null);
     setSegments(null);
+    setTokenUsage(null);
     
     try {
       // Step 1: Get video info from API
@@ -94,8 +98,11 @@ export function useTranscript(onComplete?: (item: TranscriptItem) => void) {
       
       const transcriptText = transcriptResponse.data.transcript;
       const transcriptSegments = transcriptResponse.data.segments || null;
+      const usage = transcriptResponse.data.tokenUsage;
+
       setTranscript(transcriptText);
       setSegments(transcriptSegments);
+      setTokenUsage(usage);
       
       // Create history item
       const item: TranscriptItem = {
@@ -103,6 +110,8 @@ export function useTranscript(onComplete?: (item: TranscriptItem) => void) {
         videoInfo: video,
         status: 'completed',
         transcript: transcriptText,
+        segments: transcriptSegments || undefined,
+        tokenUsage: usage,
         createdAt: new Date(),
         completedAt: new Date(),
       };
@@ -189,7 +198,8 @@ Video này nói về nhiều chủ đề thú vị và hữu ích. Nội dung đ
     setUrl(item.videoInfo.url);
     setVideoInfo(item.videoInfo);
     setTranscript(item.transcript || null);
-    setSegments(null); // History items don't have segments stored yet
+    setSegments(item.segments || null);
+    setTokenUsage(item.tokenUsage || null);
     setError(null);
     setIsLoading(false);
     setIsProcessing(false);
@@ -206,6 +216,7 @@ Video này nói về nhiều chủ đề thú vị và hữu ích. Nội dung đ
     videoInfo,
     transcript,
     segments,
+    tokenUsage,
     processUrl,
     reset,
     loadItem,

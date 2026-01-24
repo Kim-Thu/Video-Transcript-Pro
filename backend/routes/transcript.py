@@ -39,7 +39,8 @@ def get_transcript():
                         'text': seg.text
                     }
                     for seg in result.segments
-                ] if result.segments else None
+                ] if result.segments else None,
+                'tokenUsage': result.token_usage
             }
         })
 

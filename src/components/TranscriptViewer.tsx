@@ -33,6 +33,7 @@ export const TranscriptViewer = ({
   onCopy,
   onDownload,
   className = '',
+  tokenUsage,
 }: TranscriptViewerProps) => {
   const { t } = useLanguage();
   const [copied, setCopied] = useState(false);
@@ -129,6 +130,14 @@ export const TranscriptViewer = ({
                   <ClockIcon className="w-3 h-3 mr-1" />
                   {t('transcript.timed')}
                 </Badge>
+              )}
+              {tokenUsage && (
+                <span
+                  className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-purple-500/10 text-purple-400 border border-purple-500/20 cursor-help"
+                  title={`Input: ${tokenUsage.prompt_tokens} | Output: ${tokenUsage.completion_tokens}`}
+                >
+                  ⚡ {tokenUsage.total_tokens}
+                </span>
               )}
             </div>
           </div>

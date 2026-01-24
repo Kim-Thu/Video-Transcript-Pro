@@ -26,6 +26,11 @@ class VideoMetadata:
     duration: Optional[int] = None
 
 @dataclass
+class AIResponse:
+    text: str
+    usage: Optional[dict] = None  # {prompt_tokens, completion_tokens, total_tokens}
+
+@dataclass
 class ProcessingResult:
     transcript: str
     source: str
@@ -33,6 +38,7 @@ class ProcessingResult:
     is_demo: bool = False
     language: str = "vi"
     confidence: float = 1.0
+    token_usage: Optional[dict] = None
 
 @dataclass
 class ProcessingRequest:

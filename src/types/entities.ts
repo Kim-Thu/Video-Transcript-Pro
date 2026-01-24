@@ -44,6 +44,15 @@ export interface TranscriptSegment {
 }
 
 /**
+ * Token Usage Info
+ */
+export interface TokenUsage {
+  readonly prompt_tokens: number;
+  readonly completion_tokens: number;
+  readonly total_tokens: number;
+}
+
+/**
  * Transcript Item (History Record) - Internal entity
  */
 export interface TranscriptItem extends BaseEntity {
@@ -51,6 +60,7 @@ export interface TranscriptItem extends BaseEntity {
   status: TranscriptStatus;
   transcript?: string;
   segments?: TranscriptSegment[];
+  tokenUsage?: TokenUsage;
   error?: string;
   completedAt?: Date;
 }
