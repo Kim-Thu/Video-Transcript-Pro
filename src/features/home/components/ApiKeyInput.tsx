@@ -1,14 +1,13 @@
 'use client';
 
 import { useLanguage } from '@/contexts/LanguageContext';
-import { FC } from 'react';
 
 interface ApiKeyInputProps {
     apiKey: string;
     onChange: (key: string) => void;
 }
 
-export const ApiKeyInput: FC<ApiKeyInputProps> = ({ apiKey, onChange }) => {
+export const ApiKeyInput = ({ apiKey, onChange }: ApiKeyInputProps) => {
     const { t } = useLanguage();
 
     return (

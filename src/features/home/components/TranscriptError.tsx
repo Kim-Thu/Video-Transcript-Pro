@@ -1,11 +1,10 @@
 import { Card } from '@/components/ui/Card';
-import { FC } from 'react';
 
 interface TranscriptErrorProps {
     message: string;
 }
 
-export const TranscriptError: FC<TranscriptErrorProps> = ({ message }) => {
+export const TranscriptError = ({ message }: TranscriptErrorProps) => {
     return (
         <Card className="h-full border-error/20 bg-error/5 flex flex-col items-center justify-center p-8 text-center animate-fade-in">
             <div className="w-12 h-12 rounded-full bg-error/10 flex items-center justify-center mb-4 text-error">

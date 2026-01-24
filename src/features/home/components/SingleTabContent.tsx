@@ -7,7 +7,7 @@ import { BoltIcon } from '@/components/ui/Icons';
 import { Input } from '@/components/ui/Input';
 import { VideoPreview } from '@/components/VideoPreview';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { FC, FormEvent } from 'react';
+import { FormEvent } from 'react';
 import { ApiKeyInput } from './ApiKeyInput';
 import { TranscriptError } from './TranscriptError';
 
@@ -35,12 +35,12 @@ interface SingleTabContentProps {
     onDownloadVideo: () => void;
 }
 
-export const SingleTabContent: FC<SingleTabContentProps> = ({
+export const SingleTabContent = ({
     transcript,
     apiKey,
     onApiKeyChange,
     onDownloadVideo
-}) => {
+}: SingleTabContentProps) => {
     const { t } = useLanguage();
 
     const handleSubmit = (e: FormEvent) => {

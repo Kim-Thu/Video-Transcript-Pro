@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/Button';
 import { TrashIcon } from '@/components/ui/Icons';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { TranscriptItem } from '@/types';
-import { FC } from 'react';
 
 interface HistoryState {
     items: TranscriptItem[];
@@ -18,12 +17,11 @@ interface HistoryTabContentProps {
     onViewTranscript: (item: TranscriptItem) => void;
     onClearHistory: () => void;
 }
-
-export const HistoryTabContent: FC<HistoryTabContentProps> = ({
+export const HistoryTabContent = ({
     history,
     onViewTranscript,
     onClearHistory
-}) => {
+}: HistoryTabContentProps) => {
     const { t } = useLanguage();
 
     return (

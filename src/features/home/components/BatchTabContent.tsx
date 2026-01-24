@@ -4,7 +4,6 @@ import { BatchInput } from '@/components/BatchInput';
 import { HistoryTable } from '@/components/HistoryTable';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { TranscriptItem } from '@/types';
-import { FC } from 'react';
 
 interface BatchProcessState {
     processBatch: (urls: string[]) => void;
@@ -21,10 +20,10 @@ interface BatchTabContentProps {
     onViewTranscript: (item: TranscriptItem) => void;
 }
 
-export const BatchTabContent: FC<BatchTabContentProps> = ({
+export const BatchTabContent = ({
     batchProcess,
     onViewTranscript
-}) => {
+}: BatchTabContentProps) => {
     const { t } = useLanguage();
 
     return (
