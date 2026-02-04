@@ -20,11 +20,20 @@ def normalize_url(url):
         return url
         
     # Handle Douyin share links: m.douyin.com/share/video/ID -> www.douyin.com/video/ID
-    if 'douyin.com' in url and '/share/video/' in url:
-        match = re.search(r'/share/video/(\d+)', url)
-        if match:
-            video_id = match.group(1)
-            return f"https://www.douyin.com/video/{video_id}"
+    if 'douyin.com' in url:
+        # Case 1: /share/video/ID
+        if '/share/video/' in url:
+            match = re.search(r'/share/video/(\d+)', url)
+            if match:
+                video_id = match.group(1)
+                return f"https://www.douyin.com/video/{video_id}"
+        
+        # Case 2: ?modal_id=ID or similar query params
+        if 'modal_id=' in url:
+            match = re.search(r'modal_id=(\d+)', url)
+            if match:
+                video_id = match.group(1)
+                return f"https://www.douyin.com/video/{video_id}"
             
     return url
 
