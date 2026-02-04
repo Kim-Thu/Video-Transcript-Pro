@@ -14,40 +14,6 @@ def detect_platform(url):
         return 'douyin'
     return 'unknown'
 
-def normalize_url(url):
-    """Normalize URL to a format that yt-dlp prefers"""
-    if not url:
-        return url
-        
-    # Handle Douyin
-    if 'douyin.com' in url:
-        # Clean query params but keep modal_id if it's there
-        if 'modal_id=' in url:
-            match = re.search(r'modal_id=(\d+)', url)
-            if match:
-                video_id = match.group(1)
-                return f"https://www.douyin.com/video/{video_id}"
-        
-        # Handle share links
-        if '/share/video/' in url:
-            match = re.search(r'/share/video/(\d+)', url)
-            if match:
-                video_id = match.group(1)
-                return f"https://www.douyin.com/video/{video_id}"
-
-    # Handle TikTok
-    if 'tiktok.com' in url:
-        # Standardize tiktok domains
-        url = url.replace('vt.tiktok.com', 'www.tiktok.com')
-        url = url.replace('vm.tiktok.com', 'www.tiktok.com')
-        url = url.replace('m.tiktok.com', 'www.tiktok.com')
-        
-        # Remove tracking params (query string)
-        if '?' in url:
-            url = url.split('?')[0]
-            
-    return url
-
 import unicodedata
 
 def sanitize_filename(title):

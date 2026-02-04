@@ -231,15 +231,20 @@ export const TranscriptViewer = ({
               )}
 
               {/* Timestamp Toggle */}
-              {hasTimestamps && (
-                <Button
-                  variant={showTimestamps ? "primary" : "secondary"}
-                  size="sm"
-                  onClick={() => setShowTimestamps(!showTimestamps)}
-                  leftIcon={<ClockIcon className="w-4 h-4" />}
-                  title={showTimestamps ? t('transcript.hide_time') : t('transcript.show_time')}
-                />
-              )}
+              <Button
+                variant={showTimestamps ? "primary" : "secondary"}
+                size="sm"
+                onClick={() => {
+                  if (!hasTimestamps) {
+                    toast.info(t('transcript.no_timestamps') || 'Transcript này không có dữ liệu thời gian.');
+                    return;
+                  }
+                  setShowTimestamps(!showTimestamps);
+                }}
+                className={!hasTimestamps ? "opacity-50 cursor-not-allowed" : ""}
+                leftIcon={<ClockIcon className="w-4 h-4" />}
+                title={showTimestamps ? t('transcript.hide_time') : t('transcript.show_time')}
+              />
 
               <Button
                 variant="secondary"

@@ -54,7 +54,24 @@ class GeminiAIService(IAIService):
             last_err = None
             
             # Plain Text Prompt
-            prompt = "Hãy nghe thật kỹ và tạo transcript tiếng Việt chi tiết, chính xác từng từ cho file âm thanh này. Tuyệt đối không tóm tắt, không thêm lời dẫn, chỉ ghi lại lời thoại."
+            # Plain Text Prompt - Verbatim Transcription
+            prompt = """
+            Hãy nghe kỹ file âm thanh và thực hiện chép lời (transcribe) chính xác từng từ theo NGÔN NGỮ GỐC của video (Tiếng Việt, Anh, Hàn, Trung...).
+            
+            YÊU CẦU BẮT BUỘC:
+            1. KHÔNG DỊCH sang ngôn ngữ khác. Video nói tiếng gì ghi tiếng đó.
+            2. Trình bày kết quả dưới dạng WebVTT format (Subtitle) để có timestamp.
+            3. Không thêm lời dẫn, không thêm chú thích (Gốc/Dịch).
+            
+            Ví dụ định dạng mong muốn:
+            WEBVTT
+
+            00:00:00.000 --> 00:00:05.000
+            Xin chào mọi người, hôm nay chúng ta sẽ bắt đầu.
+
+            00:00:05.000 --> 00:00:10.000
+            Hello everyone, today we will start.
+            """
 
             for m_name in model_names:
                 try:

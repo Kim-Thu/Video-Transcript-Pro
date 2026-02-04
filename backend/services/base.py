@@ -12,15 +12,23 @@ class IMediaDownloader(ABC):
     def extract_audio(self, video_path: str, output_path: str) -> bool:
         """Extract audio from video. Returns success boolean."""
         pass
-        
-    @abstractmethod
-    def download_subtitles_only(self, url: str, output_base_path: str) -> List[str]:
-        """Download only subtitles without the video file. Returns list of paths."""
-        pass
 
+    @abstractmethod
+    def download_subtitles_only(self, url: str, output_base_path: str) -> bool:
+        """Download subtitles only without the video. Returns true if any sub saved."""
+        pass
+        
     @abstractmethod
     def get_subtitles(self, file_base_path: str) -> List[str]:
         """Get list of subtitle files associated with the video."""
+        pass
+
+    @abstractmethod
+    def get_transcript_content(self, url: str) -> Tuple[Optional[str], Optional[str]]:
+        """
+        Fetch transcript content directly from URL without downloading files.
+        Returns: (content_string, language_code) or (None, None)
+        """
         pass
 
 class IAIService(ABC):

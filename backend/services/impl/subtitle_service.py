@@ -53,6 +53,13 @@ class VTTSubtitleParser(ISubtitleParser):
         segments: List[TranscriptSegment] = []
         seen_texts = set()
         
+        # Strip markdown code blocks if present
+        if '```' in content:
+             # Try to extract content inside ```vtt or just ```
+             match = re.search(r'```(?:vtt|webvtt)?\n(.*?)```', content, re.DOTALL | re.IGNORECASE)
+             if match:
+                 content = match.group(1)
+        
         # Split into blocks (cues)
         blocks = re.split(r'\n\s*\n', content)
         
