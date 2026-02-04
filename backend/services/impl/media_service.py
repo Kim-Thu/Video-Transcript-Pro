@@ -8,6 +8,34 @@ from services.base import IMediaDownloader
 from utils.helpers import normalize_url
 
 class YtDlpMediaService(IMediaDownloader):
+    def download_subtitles_only(self, url: str, output_base_path: str) -> list[str]:
+        url = normalize_url(url)
+        user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        
+        ydl_opts = {
+            'skip_download': True,
+            'outtmpl': output_base_path,
+            'writesubtitles': True,
+            'writeautomaticsub': True,
+            'subtitlesformat': 'vtt',
+            'subtitleslangs': ['vi.*', 'en.*', 'all', '-live_chat'],
+            'quiet': True,
+            'no_warnings': True,
+            'nocheckcertificate': True,
+            'http_headers': {
+                'User-Agent': user_agent,
+                'Referer': 'https://www.youtube.com/'
+            }
+        }
+        
+        try:
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                ydl.extract_info(url, download=True)
+            return self.get_subtitles(output_base_path)
+        except Exception as e:
+            print(f"Subtitle Only Download Error: {e}")
+            return []
+
     def download_video(self, url: str, output_path: str) -> Optional[str]:
         url = normalize_url(url)
         user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
@@ -15,20 +43,18 @@ class YtDlpMediaService(IMediaDownloader):
             user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
 
         ydl_opts = {
-            'format': 'bestvideo+bestaudio/best',
+            # Prefer audio-only if possible to save bandwidth/time for transcription
+            'format': 'bestaudio/best',
             'outtmpl': output_path,
             'noplaylist': True,
             'ignoreerrors': True,
-            'writesubtitles': True,
-            'writeautomaticsub': True,
-            'subtitlesformat': 'vtt',
-            'subtitleslangs': ['all', '-live_chat'],
             'quiet': True,
             'no_warnings': True,
-            # 'cookiesfrombrowser': ('chrome', 'edge'), 
+            'nocheckcertificate': True,
+            'geo_bypass': True,
             'http_headers': {
                 'User-Agent': user_agent,
-                'Referer': 'https://www.douyin.com/' if 'douyin.com' in url else None
+                'Referer': 'https://www.tiktok.com/' if 'tiktok.com' in url else 'https://www.douyin.com/' if 'douyin.com' in url else 'https://www.google.com/'
             }
         }
 
@@ -45,11 +71,11 @@ class YtDlpMediaService(IMediaDownloader):
             if os.path.exists(output_path):
                 return output_path
             
-            # Check fallbacks
+            # Check fallbacks (sometimes bestaudio saves as .m4a, .webm, etc)
             base_name = output_path.rsplit('.', 1)[0]
             candidates = [
-                output_path + '.mp4', output_path + '.mkv', output_path + '.webm',
-                base_name + '.mp4', base_name + '.mkv', base_name + '.webm'
+                output_path + '.mp4', output_path + '.mkv', output_path + '.webm', output_path + '.m4a',
+                base_name + '.mp4', base_name + '.mkv', base_name + '.webm', base_name + '.m4a'
             ]
             
             for candidate in candidates:
@@ -65,7 +91,8 @@ class YtDlpMediaService(IMediaDownloader):
         # Re-implementing extract_audio here to be self-contained
         try:
             if os.path.exists(output_path):
-                return True
+                # If it's already a wav, fine. If it's the audio file we downloaded, we still need to convert to 16k mono for Gemini/AI
+                pass
                 
             command = [
                 'ffmpeg', '-i', video_path,
@@ -82,8 +109,8 @@ class YtDlpMediaService(IMediaDownloader):
 
     def get_subtitles(self, file_base_path: str) -> list[str]:
         try:
-            safe_base_name = glob.escape(file_base_path)
-            # Find all VTT files matching the base name
-            return glob.glob(f"{safe_base_name}*.vtt")
+            # Glob search for any VTT file that starts with this base path
+            pattern = f"{glob.escape(file_base_path)}*.vtt"
+            return glob.glob(pattern)
         except Exception:
             return []

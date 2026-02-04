@@ -19,21 +19,32 @@ def normalize_url(url):
     if not url:
         return url
         
-    # Handle Douyin share links: m.douyin.com/share/video/ID -> www.douyin.com/video/ID
+    # Handle Douyin
     if 'douyin.com' in url:
-        # Case 1: /share/video/ID
-        if '/share/video/' in url:
-            match = re.search(r'/share/video/(\d+)', url)
-            if match:
-                video_id = match.group(1)
-                return f"https://www.douyin.com/video/{video_id}"
-        
-        # Case 2: ?modal_id=ID or similar query params
+        # Clean query params but keep modal_id if it's there
         if 'modal_id=' in url:
             match = re.search(r'modal_id=(\d+)', url)
             if match:
                 video_id = match.group(1)
                 return f"https://www.douyin.com/video/{video_id}"
+        
+        # Handle share links
+        if '/share/video/' in url:
+            match = re.search(r'/share/video/(\d+)', url)
+            if match:
+                video_id = match.group(1)
+                return f"https://www.douyin.com/video/{video_id}"
+
+    # Handle TikTok
+    if 'tiktok.com' in url:
+        # Standardize tiktok domains
+        url = url.replace('vt.tiktok.com', 'www.tiktok.com')
+        url = url.replace('vm.tiktok.com', 'www.tiktok.com')
+        url = url.replace('m.tiktok.com', 'www.tiktok.com')
+        
+        # Remove tracking params (query string)
+        if '?' in url:
+            url = url.split('?')[0]
             
     return url
 

@@ -14,9 +14,11 @@ def get_video_info(url):
     ydl_opts = {
         'quiet': True,
         'no_warnings': True,
+        'nocheckcertificate': True,
+        'geo_bypass': True,
         'http_headers': {
             'User-Agent': user_agent,
-            'Referer': 'https://www.douyin.com/' if 'douyin.com' in url else None
+            'Referer': 'https://www.tiktok.com/' if 'tiktok.com' in url else 'https://www.douyin.com/' if 'douyin.com' in url else 'https://www.google.com/'
         }
     }
     try:
@@ -58,10 +60,13 @@ def download_video_to_file(url, output_path):
         'subtitleslangs': ['all', '-live_chat'], # Lấy tất cả ngôn ngữ
         'quiet': True,
         'no_warnings': True,
-        # 'cookiesfrombrowser': ('chrome', 'edge'), 
+        'nocheckcertificate': True,
+        'geo_bypass': True,
+        'prefer_free_formats': True,
+        'youtube_include_dash_manifest': False,
         'http_headers': {
             'User-Agent': user_agent,
-            'Referer': 'https://www.douyin.com/' if 'douyin.com' in url else None
+            'Referer': 'https://www.tiktok.com/' if 'tiktok.com' in url else 'https://www.douyin.com/' if 'douyin.com' in url else 'https://www.google.com/'
         }
     }
 

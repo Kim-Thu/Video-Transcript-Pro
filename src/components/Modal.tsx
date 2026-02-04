@@ -1,7 +1,8 @@
 'use client';
 
 import type { ModalProps } from '@/types';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 /**
  * Modal Component
@@ -14,43 +15,51 @@ export const Modal = ({
   size = 'md',
   className = '',
 }: ModalProps) => {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
+
   // Handle escape key
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
     };
-    
+
     if (isOpen) {
       document.addEventListener('keydown', handleEscape);
       document.body.style.overflow = 'hidden';
     }
-    
+
     return () => {
       document.removeEventListener('keydown', handleEscape);
       document.body.style.overflow = '';
     };
   }, [isOpen, onClose]);
-  
+
   const handleBackdropClick = useCallback((e: React.MouseEvent) => {
     if (e.target === e.currentTarget) onClose();
   }, [onClose]);
-  
-  if (!isOpen) return null;
-  
+
+  if (!isOpen || !mounted) return null;
+
   const sizeClasses = {
     sm: 'max-w-sm',
     md: 'max-w-lg',
     lg: 'max-w-2xl',
     xl: 'max-w-4xl',
   };
-  
-  return (
-    <div 
+
+  return createPortal(
+    <div
       className="modal-overlay animate-fade-in"
       onClick={handleBackdropClick}
       role="dialog"
       aria-modal="true"
       aria-labelledby={title ? 'modal-title' : undefined}
+      style={{ zIndex: 9999 }}
     >
       <div className={`modal-content w-full ${sizeClasses[size]} ${className}`}>
         {/* Header */}
@@ -69,12 +78,13 @@ export const Modal = ({
             </button>
           </div>
         )}
-        
+
         {/* Content */}
         <div className="p-6">
           {children}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

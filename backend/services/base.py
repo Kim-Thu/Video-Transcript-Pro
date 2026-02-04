@@ -14,6 +14,11 @@ class IMediaDownloader(ABC):
         pass
         
     @abstractmethod
+    def download_subtitles_only(self, url: str, output_base_path: str) -> List[str]:
+        """Download only subtitles without the video file. Returns list of paths."""
+        pass
+
+    @abstractmethod
     def get_subtitles(self, file_base_path: str) -> List[str]:
         """Get list of subtitle files associated with the video."""
         pass
