@@ -5,6 +5,7 @@ export * from '../icons/CopyIcon';
 export * from '../icons/DocumentIcon';
 export * from '../icons/DouyinIcon';
 export * from '../icons/DownloadIcon';
+export * from '../icons/EditIcon';
 export * from '../icons/FacebookIcon';
 export * from '../icons/HistoryIcon';
 export * from '../icons/LinkIcon';

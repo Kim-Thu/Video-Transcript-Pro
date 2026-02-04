@@ -13,6 +13,8 @@ export const en = {
     view: 'View',
     confirm: 'Confirm',
     cancel: 'Cancel',
+    save: 'Save',
+    saved: 'Saved!',
   },
   header: {
     title: 'Video Transcript Pro',

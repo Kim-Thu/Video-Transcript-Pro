@@ -56,6 +56,16 @@ export const useHomePage = () => {
     }
   }, [apiKey, batchProcess]);
 
+  // Sync changes back to history if editing an existing item
+  useEffect(() => {
+    if (transcript.itemId) {
+      history.updateItem(transcript.itemId, {
+        transcript: transcript.transcript || undefined,
+        segments: transcript.segments || undefined
+      });
+    }
+  }, [transcript.transcript, transcript.segments, transcript.itemId, history]);
+
   // --- Handlers ---
   const handleTabChange = useCallback((tabId: string) => {
     setActiveTab(tabId as TabType);

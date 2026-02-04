@@ -1,26 +1,29 @@
-'use client';
-
+import { TranscriptSegment } from '@/types';
 import { Modal } from './Modal';
-import { Button } from './ui';
+import { TranscriptViewer } from './TranscriptViewer';
 
-export const TranscriptModal = ({ isOpen, onClose, transcript, videoTitle }: { 
-  isOpen: boolean; 
-  onClose: () => void; 
-  transcript: string; 
-  videoTitle?: string; 
-}) => {
+interface TranscriptModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  transcript: string;
+  videoTitle?: string;
+  segments?: TranscriptSegment[];
+}
+
+export const TranscriptModal = ({
+  isOpen,
+  onClose,
+  transcript,
+  videoTitle,
+  segments
+}: TranscriptModalProps) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={videoTitle || 'Transcript'} size="lg">
-      <div className="bg-secondary/50 rounded-xl p-4 max-h-96 overflow-y-auto">
-        <p className="text-foreground leading-relaxed whitespace-pre-wrap">
-          {transcript}
-        </p>
-      </div>
-      <div className="flex justify-end mt-4">
-        <Button variant="secondary" onClick={onClose}>
-          Đóng
-        </Button>
-      </div>
+      <TranscriptViewer
+        transcript={transcript}
+        videoTitle={videoTitle}
+        segments={segments}
+      />
     </Modal>
   );
 };

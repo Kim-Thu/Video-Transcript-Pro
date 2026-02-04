@@ -26,6 +26,8 @@ interface TranscriptState {
     segments?: TranscriptSegment[] | null;
     tokenUsage?: any;
     processUrl: () => void;
+    setSegments: (segments: TranscriptSegment[] | null) => void;
+    setTranscript: (transcript: string | null) => void;
 }
 
 interface SingleTabContentProps {
@@ -116,6 +118,8 @@ export const SingleTabContent = ({
                                 videoTitle={transcript.videoInfo?.title}
                                 segments={transcript.segments || undefined}
                                 tokenUsage={transcript.tokenUsage}
+                                onSegmentsChange={transcript.setSegments}
+                                onTranscriptChange={transcript.setTranscript}
                                 className="h-full shadow-lg border-opacity-50"
                             />
                         ) : null}

@@ -35,6 +35,7 @@ export interface VideoInfoResponse {
  * Transcript Segment with timing information
  */
 import type { TokenUsage, TranscriptSegment } from './entities';
+export type { TokenUsage, TranscriptSegment };
 
 // ...
 

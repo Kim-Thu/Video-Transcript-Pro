@@ -13,6 +13,8 @@ export const vi = {
     view: 'Xem',
     confirm: 'Xác nhận',
     cancel: 'Hủy',
+    save: 'Lưu',
+    saved: 'Đã lưu!',
   },
   header: {
     title: 'Video Transcript Pro',

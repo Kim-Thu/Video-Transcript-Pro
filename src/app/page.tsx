@@ -73,6 +73,7 @@ export default function HomePage() {
           onClose={logic.handleCloseModal}
           transcript={logic.selectedItem.transcript || ''}
           videoTitle={logic.selectedItem.videoInfo.title}
+          segments={logic.selectedItem.segments}
         />
       )}
     </>

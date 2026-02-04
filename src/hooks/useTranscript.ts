@@ -11,6 +11,7 @@ import { useCallback, useState } from 'react';
  * Connects to real Flask backend API
  */
 export function useTranscript(onComplete?: (item: TranscriptItem) => void) {
+  const [itemId, setItemId] = useState<string | null>(null);
   const [url, setUrl] = useState('');
   const [apiKey, setApiKey] = useState(''); // Add apiKey state
   const [isLoading, setIsLoading] = useState(false);
@@ -29,6 +30,7 @@ export function useTranscript(onComplete?: (item: TranscriptItem) => void) {
   
   // Clear all state
   const reset = useCallback(() => {
+    setItemId(null);
     setUrl('');
     setError(null);
     setVideoInfo(null);
@@ -195,6 +197,7 @@ Video này nói về nhiều chủ đề thú vị và hữu ích. Nội dung đ
   
   // Load data from existing item
   const loadItem = useCallback((item: TranscriptItem) => {
+    setItemId(item.id);
     setUrl(item.videoInfo.url);
     setVideoInfo(item.videoInfo);
     setTranscript(item.transcript || null);
@@ -217,7 +220,10 @@ Video này nói về nhiều chủ đề thú vị và hữu ích. Nội dung đ
     transcript,
     segments,
     tokenUsage,
+    itemId,
     processUrl,
+    setSegments,
+    setTranscript,
     reset,
     loadItem,
     isReady: url.trim().length > 0,

@@ -38,8 +38,7 @@ def download_video_endpoint():
     if not url:
         return jsonify({'success': False, 'error': {'code': 'MISSING_URL', 'message': 'URL is required'}}), 400
 
-    print(f"[DOWNLOAD] Request for URL: {url}")
-    print(f"[DOWNLOAD] Title provided: {title}")
+
 
     # Generate unique temp path
     video_id = str(uuid.uuid4())
@@ -54,7 +53,7 @@ def download_video_endpoint():
         downloaded_path = download_video_to_file(url, temp_path)
         
         if downloaded_path and os.path.exists(downloaded_path):
-            print(f"[DOWNLOAD] Success! Sending file: {downloaded_path} as {final_filename}")
+
             return send_file(
                 downloaded_path,
                 as_attachment=True,

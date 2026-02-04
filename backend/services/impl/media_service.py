@@ -21,7 +21,9 @@ class YtDlpMediaService(IMediaDownloader):
             'writeautomaticsub': True,
             'subtitlesformat': 'vtt',
             'subtitleslangs': ['all', '-live_chat'],
-            'cookiesfrombrowser': ('chrome', 'edge'), 
+            'quiet': True,
+            'no_warnings': True,
+            # 'cookiesfrombrowser': ('chrome', 'edge'), 
             'http_headers': {
                 'User-Agent': user_agent,
                 'Referer': 'https://www.douyin.com/' if 'douyin.com' in url else None
@@ -34,7 +36,7 @@ class YtDlpMediaService(IMediaDownloader):
                 try: os.remove(output_path)
                 except: pass
 
-            print(f"Downloading: {url} -> {output_path}")
+
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 ydl.extract_info(url, download=True)
 

@@ -47,7 +47,7 @@ def get_transcript():
     except Exception as e:
         print(f"Workflow Error: {str(e)}")
         import traceback
-        traceback.print_exc()
+        # traceback.print_exc()
         
         error_msg = str(e)
         status_code = 500

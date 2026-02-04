@@ -28,7 +28,7 @@ class GeminiAIService(IAIService):
             return AIResponse(text="Error: No API Key provided.")
 
         try:
-            print(f"🚀 [Gemini] Uploading audio: {os.path.basename(audio_path)}")
+
             genai.configure(api_key=key)
             audio_file = genai.upload_file(path=audio_path)
             
@@ -40,7 +40,7 @@ class GeminiAIService(IAIService):
             if audio_file.state.name == "FAILED":
                 raise ValueError("Gemini failed to process audio file.")
 
-            print("✨ [Gemini] Generating transcript...")
+
             
             # Model selection strategy
             model_names = [

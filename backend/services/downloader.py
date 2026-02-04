@@ -21,12 +21,6 @@ def get_video_info(url):
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=False)
             
-            # DEBUG LOGGING
-            subs = info.get('subtitles', {})
-            auto_subs = info.get('automatic_captions', {})
-            print(f"[{url}] Available subtitles: {list(subs.keys())}")
-            print(f"[{url}] Automatic captions: {list(auto_subs.keys())}")
-            
             return {
                 'title': info.get('title'),
                 'description': info.get('description'),
@@ -59,7 +53,9 @@ def download_video_to_file(url, output_path):
         'writeautomaticsub': True,    # Tải phụ đề tự động (auto-generated)
         'subtitlesformat': 'vtt',     # Định dạng VTT
         'subtitleslangs': ['all', '-live_chat'], # Lấy tất cả ngôn ngữ
-        'cookiesfrombrowser': ('chrome', 'edge'), # Thử lấy cookie từ Chrome/Edge để bypass
+        'quiet': True,
+        'no_warnings': True,
+        # 'cookiesfrombrowser': ('chrome', 'edge'), 
         'http_headers': {
             'User-Agent': user_agent,
             'Referer': 'https://www.douyin.com/' if 'douyin.com' in url else None
@@ -74,7 +70,7 @@ def download_video_to_file(url, output_path):
             except:
                 pass
                 
-        print(f"Downloading: {url} -> {output_path}")
+
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.extract_info(url, download=True)
             
@@ -95,7 +91,7 @@ def download_video_to_file(url, output_path):
         
         for candidate in candidates:
             if os.path.exists(candidate):
-                print(f"Found file with different name: {candidate}")
+
                 return candidate
         
         return None
