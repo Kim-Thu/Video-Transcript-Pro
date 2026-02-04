@@ -101,8 +101,35 @@ class VTTSubtitleParser(ISubtitleParser):
                         raw_text = ' '.join(text_lines)
                         clean_text = self._clean_text(raw_text)
                         
-                        # Avoid duplicates
-                        if clean_text and clean_text not in seen_texts:
+                        # Avoid duplicates and rolling captions
+                        if not clean_text:
+                            continue
+
+                        # Check against the last added segment
+                        is_duplicate = False
+                        if segments:
+                            last_seg = segments[-1]
+                            last_text_norm = re.sub(r'[^\w\s]', '', last_seg.text.lower())
+                            curr_text_norm = re.sub(r'[^\w\s]', '', clean_text.lower())
+                            
+                            # Case 1: Current is a substring of Last (e.g. "World" after "Hello World")
+                            if curr_text_norm in last_text_norm:
+                                # Just skip this 'echo'
+                                is_duplicate = True
+                            
+                            # Case 2: Last is a substring of Current (e.g. "Hello World" after "Hello")
+                            # Usually means the caption was updated/completed
+                            elif last_text_norm in curr_text_norm:
+                                # Check if they are temporally related (start times are close)
+                                if abs(start_time - last_seg.start) < 2.5: # 2.5s window for corrections
+                                    # Replace the last segment with this fuller version
+                                    segments.pop()
+                                    # We don't mark is_duplicate, so it gets added below
+                                    # Remove from seen_texts to allow re-adding if needed (though seen_texts is simple set)
+                                    if last_seg.text in seen_texts:
+                                        seen_texts.remove(last_seg.text)
+                        
+                        if not is_duplicate and clean_text not in seen_texts:
                             seen_texts.add(clean_text)
                             segments.append(TranscriptSegment(
                                 start=start_time,
