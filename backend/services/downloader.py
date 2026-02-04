@@ -1,13 +1,15 @@
 import os
 import yt_dlp
 from config import DOWNLOAD_DIR
+from utils.helpers import normalize_url
 
 def get_video_info(url):
     """Get video information using yt-dlp"""
-    # Use Mobile UA for Douyin to bypass some checks
-    user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'
+    url = normalize_url(url)
+    # Use Chrome UA for Douyin as mobile sometimes triggers "Fresh cookies" more
+    user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
     if 'douyin.com' in url:
-        user_agent = 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36'
+        user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
 
     ydl_opts = {
         'quiet': True,
@@ -39,10 +41,11 @@ def download_video_to_file(url, output_path):
     Download video from URL directly to a specific path using yt-dlp.
     Returns the absolute path of the downloaded file or None.
     """
+    url = normalize_url(url)
     # Cấu hình các tùy chọn cho yt-dlp
-    user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'
+    user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
     if 'douyin.com' in url:
-        user_agent = 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36'
+        user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
 
     ydl_opts = {
         'format': 'bestvideo+bestaudio/best',

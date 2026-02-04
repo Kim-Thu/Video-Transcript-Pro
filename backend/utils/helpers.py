@@ -14,6 +14,20 @@ def detect_platform(url):
         return 'douyin'
     return 'unknown'
 
+def normalize_url(url):
+    """Normalize URL to a format that yt-dlp prefers"""
+    if not url:
+        return url
+        
+    # Handle Douyin share links: m.douyin.com/share/video/ID -> www.douyin.com/video/ID
+    if 'douyin.com' in url and '/share/video/' in url:
+        match = re.search(r'/share/video/(\d+)', url)
+        if match:
+            video_id = match.group(1)
+            return f"https://www.douyin.com/video/{video_id}"
+            
+    return url
+
 import unicodedata
 
 def sanitize_filename(title):

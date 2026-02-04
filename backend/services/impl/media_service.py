@@ -5,12 +5,14 @@ import subprocess
 from typing import Optional
 import yt_dlp
 from services.base import IMediaDownloader
+from utils.helpers import normalize_url
 
 class YtDlpMediaService(IMediaDownloader):
     def download_video(self, url: str, output_path: str) -> Optional[str]:
-        user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'
+        url = normalize_url(url)
+        user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
         if 'douyin.com' in url:
-            user_agent = 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36'
+            user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
 
         ydl_opts = {
             'format': 'bestvideo+bestaudio/best',
