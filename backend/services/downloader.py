@@ -1,9 +1,27 @@
 import os
+import re
 import yt_dlp
-from config import DOWNLOAD_DIR
+from config import DOWNLOAD_DIR, get_cookie_opts
+
+
+def normalize_url(url):
+    """
+    Normalize video URLs for yt-dlp compatibility.
+    - Convert TikTok /photo/ to /video/ (same content ID)
+    - Strip unnecessary tracking parameters
+    """
+    # TikTok: /photo/ → /video/ (yt-dlp only supports /video/ URLs)
+    if 'tiktok.com' in url:
+        url = re.sub(r'/photo/', '/video/', url)
+        # Clean tracking params
+        url = re.sub(r'[?&](is_from_webapp|sender_device|web_id)=[^&]*', '', url)
+        url = url.rstrip('?&')
+
+    return url
 
 def get_video_info(url):
     """Get video information using yt-dlp"""
+    url = normalize_url(url)
     # Use Mobile UA for Douyin to bypass some checks
     user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'
     if 'douyin.com' in url:
@@ -17,6 +35,7 @@ def get_video_info(url):
             'Referer': 'https://www.douyin.com/' if 'douyin.com' in url else None
         }
     }
+    ydl_opts.update(get_cookie_opts())
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=False)
@@ -39,6 +58,7 @@ def download_video_to_file(url, output_path):
     Download video from URL directly to a specific path using yt-dlp.
     Returns the absolute path of the downloaded file or None.
     """
+    url = normalize_url(url)
     # Cấu hình các tùy chọn cho yt-dlp
     user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'
     if 'douyin.com' in url:
@@ -55,12 +75,12 @@ def download_video_to_file(url, output_path):
         'subtitleslangs': ['vi.*', 'en.*'], # Lấy tất cả ngôn ngữ
         'quiet': True,
         'no_warnings': True,
-        # 'cookiesfrombrowser': ('chrome', 'edge'), 
         'http_headers': {
             'User-Agent': user_agent,
             'Referer': 'https://www.douyin.com/' if 'douyin.com' in url else None
         }
     }
+    ydl_opts.update(get_cookie_opts())
 
     try:
         # Clean up existing file

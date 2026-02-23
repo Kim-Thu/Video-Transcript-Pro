@@ -4,10 +4,13 @@ import re
 import subprocess
 from typing import Optional
 import yt_dlp
+from config import get_cookie_opts
 from services.base import IMediaDownloader
+from services.downloader import normalize_url
 
 class YtDlpMediaService(IMediaDownloader):
     def download_video(self, url: str, output_path: str) -> Optional[str]:
+        url = normalize_url(url)
         user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'
         if 'douyin.com' in url:
             user_agent = 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36'
@@ -23,12 +26,12 @@ class YtDlpMediaService(IMediaDownloader):
             'subtitleslangs': ['vi*', 'en*'],
             'quiet': True,
             'no_warnings': True,
-            # 'cookiesfrombrowser': ('chrome', 'edge'), 
             'http_headers': {
                 'User-Agent': user_agent,
                 'Referer': 'https://www.douyin.com/' if 'douyin.com' in url else None
             }
         }
+        ydl_opts.update(get_cookie_opts())
 
         try:
             # Cleanup existing
@@ -61,6 +64,7 @@ class YtDlpMediaService(IMediaDownloader):
 
     def download_subtitles_only(self, url: str, output_base_path: str) -> bool:
         """Download subtitles only without the video."""
+        url = normalize_url(url)
         user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'
         
         ydl_opts = {
@@ -73,8 +77,8 @@ class YtDlpMediaService(IMediaDownloader):
             'quiet': True,
             'no_warnings': True,
             'ignoreerrors': True,
-            # 'http_headers': { 'User-Agent': user_agent } # Let yt-dlp handle it
         }
+        ydl_opts.update(get_cookie_opts())
         
         try:
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -116,7 +120,7 @@ class YtDlpMediaService(IMediaDownloader):
 
     def get_transcript_content(self, url: str) -> tuple[Optional[str], Optional[str]]:
         import requests
-        
+        url = normalize_url(url)
         ydl_opts = {
             'quiet': True,
             'no_warnings': True,
@@ -124,6 +128,7 @@ class YtDlpMediaService(IMediaDownloader):
             'writeautomaticsub': True,
             'skip_download': True,
         }
+        ydl_opts.update(get_cookie_opts())
         
         try:
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:

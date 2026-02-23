@@ -68,6 +68,11 @@ build/
 downloads/
 backend/downloads/
 
+# Cookies & Scripts
+cookies.txt
+backend/cookies.txt
+backend/export_cookies.py
+
 # IDE
 .idea/
 .vscode/
